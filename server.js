@@ -7,6 +7,7 @@ const rfs = require('rotating-file-stream')
 const path=require('path');
 const morgan =require('morgan');
 const cors = require('cors');
+const mongoose = require('mongoose');
 const app = express();
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json());
@@ -32,8 +33,16 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 app.listen(app.get('port'));
+const uri = "mongodb+srv://Afsaneh:XZwrMM1vPhF7MP5R@cluster0-cumqi.mongodb.net/sample_airbnb?retryWrites=true&w=majority";
+mongoose.connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+let db = mongoose.connection;
+db.on('error',console.error.bind(console,'MongoDB connection error'))
 logger.log({
     level:'info',
     message:'app listening in port '+app.get('port')
 });
 exports.logger=logger;
+exports.db=db;
