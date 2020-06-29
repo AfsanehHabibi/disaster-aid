@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 app.listen(app.get('port'));
-const uri = CONECTION_STRING
+const uri = process.env.CONECTION_STRING
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true
