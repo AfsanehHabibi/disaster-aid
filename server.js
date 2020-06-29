@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 app.listen(app.get('port'));
-const uri = "mongodb+srv://Afsaneh:XZwrMM1vPhF7MP5R@cluster0-cumqi.mongodb.net/sample_airbnb?retryWrites=true&w=majority";
+const uri = CONECTION_STRING
 mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true
