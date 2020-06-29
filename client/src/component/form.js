@@ -1,9 +1,9 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import { Form, Input, Button, InputNumber, DatePicker, Select } from 'antd';
-import { NotFound } from './notFound';
+import { NotFound } from 'component/notFound';
 import { Spin, Alert, message } from 'antd';
-import { SimpleMap } from './map.js';
+import { SimpleMap } from 'component/map.js';
 const axios = require('axios').default;
 const { Option } = Select;
 const layout = {
