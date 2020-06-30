@@ -3,6 +3,7 @@ import 'App.css';
 import { FormClass } from 'component/form.js';
 import { LoadMoreList } from 'component/list.js';
 import { NotFound } from 'component/notFound.js';
+import  Login from 'component/login.js';
 import { Layout, Menu, ConfigProvider, Radio } from 'antd';
 import {
   BrowserRouter as Router,
@@ -53,6 +54,10 @@ class App extends React.Component {
             </Route>
             <Route path='/form/:handle' component={FormClass}>
             </Route>
+
+            <Route path='/login' component={Login}>
+            </Route>
+            
             <Route path='*' exact={true} component={NotFound} />
           </Switch></div>
         </Content>
