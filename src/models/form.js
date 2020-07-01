@@ -31,6 +31,9 @@ let formSchema = new mongoose.Schema({
                     type: String
                 },
                 value: {
+                    type: String,
+                    lat: Number,
+                    long: Number
                 }
             }]
         }]
@@ -43,7 +46,9 @@ let formSchema = new mongoose.Schema({
                 unique: true,
             },
             value: {
-
+                type: String,
+                lat: Number,
+                long: Number
             }
         }]
     }
