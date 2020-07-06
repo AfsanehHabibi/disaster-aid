@@ -13,7 +13,10 @@
   "author": "Afsaneh Habibi, Akramsadat Safavimoghadam, Fatemeh Zafarpour",
   "license": "ISC",
   "dependencies": {
+    "@auth0/auth0-react": "^1.0.0",
+    "@fortawesome/react-fontawesome": "^0.1.11",
     "antd": "^4.4.0",
+    "auth0": "^2.27.0",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "concurrently": "^5.2.0",
@@ -32,6 +35,7 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.1",
+    "reactstrap": "^8.5.1",
     "rotating-file-stream": "^2.1.1",
     "winston": "^3.3.3"
   }
