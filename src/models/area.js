@@ -1,12 +1,12 @@
 let mongoose = require('mongoose')
 
+
 let areaSchema = new mongoose.Schema({
     type: {
         type: String,
         required: true
     },
     properties: {
-        required: true,
         stroke: {
             type: String
         },
@@ -28,15 +28,19 @@ let areaSchema = new mongoose.Schema({
         }
     },
     geometry: {
-        required: true,
         type: {
-            type: String
+            type: String,
+            required: true
         },
-        coordinates: [{
-            lat: Number,
-            long: Number
-        }]
+        coordinates:
+            [{
+                lat: Number,
+                long: Number
+            }
+            ]
     }
 })
 
-module.exports = mongoose.model('Area', areaSchema)
+exports.areaSchema = areaSchema
+exports.areaModel = mongoose.model('Area', areaSchema)
+

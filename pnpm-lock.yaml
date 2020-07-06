@@ -6,6 +6,8 @@ dependencies:
   express: 4.17.1
   express-graphql: 0.9.0_graphql@15.1.0
   graphql: 15.1.0
+  graphql-compose: 7.18.1_graphql@15.1.0
+  graphql-compose-mongoose: 7.4.0_ace2611aaffee81f46f4c5f78dff65b6
   mongodb: 3.5.9
   mongoose: 5.9.20_mongoose@5.9.20
   mongoose-schema-to-graphql: 2.8.1_graphql@15.1.0+mongoose@5.9.20
@@ -413,6 +415,50 @@ packages:
       node: 6.* || 8.* || >= 10.*
     resolution:
       integrity: sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==
+  /graphql-compose-connection/6.2.1_graphql-compose@7.18.1:
+    dependencies:
+      graphql-compose: 7.18.1_graphql@15.1.0
+    dev: false
+    optional: true
+    peerDependencies:
+      graphql-compose: ^7.0.4
+    resolution:
+      integrity: sha512-PmNpDg9dRC14sKJkEaepqCxaNvw5tpcbcO1xLuoCkJR+B9vasYPfvsuueN/R2s6dIDjJnvtcuf+ce25ZzgRSRw==
+  /graphql-compose-mongoose/7.4.0_ace2611aaffee81f46f4c5f78dff65b6:
+    dependencies:
+      graphql-compose: 7.18.1_graphql@15.1.0
+      mongoose: 5.9.20_mongoose@5.9.20
+      object-path: 0.11.4
+    dev: false
+    optionalDependencies:
+      graphql-compose-connection: 6.2.1_graphql-compose@7.18.1
+      graphql-compose-pagination: 6.1.0_graphql-compose@7.18.1
+    peerDependencies:
+      graphql-compose: ^7.1.0
+      mongoose: ^5.0.0 || ^4.4.0
+    resolution:
+      integrity: sha512-N/xgn1zjeIJSGdCTMsoXi+hHHaafTE2L8Brt6TDWRs12sqbLicavLLY/kjs7B+mcWTC7SZZ3KwiVv7kB8I6UVg==
+  /graphql-compose-pagination/6.1.0_graphql-compose@7.18.1:
+    dependencies:
+      graphql-compose: 7.18.1_graphql@15.1.0
+    dev: false
+    optional: true
+    peerDependencies:
+      graphql-compose: ^7.0.4
+    resolution:
+      integrity: sha512-f6KBbOeMB/FMOCbrgG5YjWm7PMvBPcd6IDMitiep3Um17juyyn7pl6nmhNgn+vePnLYOtYjoNtkr0WnoOio5Jg==
+  /graphql-compose/7.18.1_graphql@15.1.0:
+    dependencies:
+      graphql: 15.1.0
+      graphql-type-json: 0.3.2_graphql@15.1.0
+      object-path: 0.11.4
+    dev: false
+    engines:
+      node: '>= 6'
+    peerDependencies:
+      graphql: ^14.2.0 || ^15.0.0
+    resolution:
+      integrity: sha512-RcoySE0V22pE3cFtogMslUpwscsX+l/Cg203LIB/P7woEVq0cq7rDDC/sbhhsyjG17BKG99naw/VFXYRkI0jdA==
   /graphql-iso-date/3.6.1_graphql@15.1.0:
     dependencies:
       graphql: 15.1.0
@@ -421,6 +467,14 @@ packages:
       graphql: ^0.5.0 || ^0.6.0 || ^0.7.0 || ^0.8.0-b || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0
     resolution:
       integrity: sha512-AwFGIuYMJQXOEAgRlJlFL4H1ncFM8n8XmoVDTNypNOZyQ8LFDG2ppMFlsS862BSTCDcSUfHp8PD3/uJhv7t59Q==
+  /graphql-type-json/0.3.2_graphql@15.1.0:
+    dependencies:
+      graphql: 15.1.0
+    dev: false
+    peerDependencies:
+      graphql: '>=0.8.0'
+    resolution:
+      integrity: sha512-J+vjof74oMlCWXSvt0DOf2APEdZOCdubEvGDUAlqH//VBYcOYsGgRW7Xzorr44LvkjiuvecWc8fChxuZZbChtg==
   /graphql/15.1.0:
     dev: false
     engines:
@@ -700,6 +754,12 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM=
+  /object-path/0.11.4:
+    dev: false
+    engines:
+      node: '>=0.10.0'
+    resolution:
+      integrity: sha1-NwrnUvvzfePqcKhhwju6iRVpGUk=
   /on-finished/2.3.0:
     dependencies:
       ee-first: 1.1.1
@@ -1205,6 +1265,8 @@ specifiers:
   express: ^4.17.1
   express-graphql: ^0.9.0
   graphql: ^15.1.0
+  graphql-compose: ^7.18.1
+  graphql-compose-mongoose: ^7.4.0
   mongodb: ^3.5.9
   mongoose: ^5.9.20
   mongoose-schema-to-graphql: ^2.8.1

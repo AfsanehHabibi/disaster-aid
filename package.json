@@ -20,6 +20,8 @@
     "express": "^4.17.1",
     "express-graphql": "^0.9.0",
     "graphql": "^15.1.0",
+    "graphql-compose": "^7.18.1",
+    "graphql-compose-mongoose": "^7.4.0",
     "mongodb": "^3.5.9",
     "mongoose": "^5.9.20",
     "mongoose-schema-to-graphql": "^2.8.1",

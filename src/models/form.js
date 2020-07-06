@@ -21,7 +21,8 @@ let formSchema = new mongoose.Schema({
                 type: String
             },
             type: {
-                type: String
+                type: String,
+                enum: ["Text", "Number", "Location", "Date"]
             },
             required: {
                 type: Boolean
@@ -30,11 +31,7 @@ let formSchema = new mongoose.Schema({
                 label: {
                     type: String
                 },
-                value: {
-                    type: String,
-                    lat: Number,
-                    long: Number
-                }
+                value :String
             }]
         }]
     },
@@ -45,13 +42,9 @@ let formSchema = new mongoose.Schema({
                 required: true,
                 unique: true,
             },
-            value: {
-                type: String,
-                lat: Number,
-                long: Number
-            }
+            value:String
         }]
     }
 })
 
-module.exports = mongoose.model('Form', formSchema)
+exports.formModel = mongoose.model('Form', formSchema)

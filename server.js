@@ -7,7 +7,11 @@ const rfs = require('rotating-file-stream')
 const path = require('path');
 const morgan = require('morgan');
 const cors = require('cors');
+var express_graphql = require('express-graphql');
+var graphql = require('graphql');
 const { startDatabase } = require('./src/database/mongo');
+const areaModel = require('./src/models/area').areaModel
+const graphqlSchema = require('./src/schema/graphql')
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
@@ -25,6 +29,12 @@ const logger = winston.createLogger({
 app.use(morgan('common', { stream: requestLogStream }));
 app.set('port', process.env.PORT || 5000);
 app.use(require("./api/test.js"));
+// Create an express server and a GraphQL endpoint
+app.use('/graphql', express_graphql({
+  schema: graphqlSchema,
+  //rootValue: root,
+  graphiql: true
+}));
 if (process.env.NODE_ENV === 'production') {
   // Serve any static files
   app.use(express.static(path.join(__dirname, 'client/build')));
