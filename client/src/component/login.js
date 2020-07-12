@@ -33,9 +33,7 @@ const Login = () => {
 
   const logoutWithRedirect = () =>
     logout({
-      //returnTo: "http://localhost:3000",
-      returnTo: "/",
-
+      returnTo: "http://localhost:3000",
     });
 
   const menu = (

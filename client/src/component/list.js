@@ -5,9 +5,7 @@ import {Link} from 'react-router-dom';
 
 const axios = require('axios').default;
 const count = 3;
-//const fakeDataUrl =`https://secret-chamber-63894.herokuapp.com/api/forms`;
-const fakeDataUrl =`./forms`;
-
+const fakeDataUrl =`https://secret-chamber-63894.herokuapp.com/api/forms`;
 export class LoadMoreList extends React.Component {
   state = {
     initLoading: true,

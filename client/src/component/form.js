@@ -32,8 +32,7 @@ export class FormClass extends React.Component {
   }
   componentDidMount() {
     const { handle } = this.props.match.params
-    //axios.get(`https://secret-chamber-63894.herokuapp.com/api/forms/${handle}`)
-    axios.get(`./${handle}`)
+    axios.get(`https://secret-chamber-63894.herokuapp.com/api/forms/${handle}`)
       .then(res => {
         this.setState({
           loading: false,
