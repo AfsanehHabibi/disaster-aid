@@ -28,7 +28,6 @@ const logger = winston.createLogger({
 });
 app.use(morgan('common', { stream: requestLogStream }));
 app.set('port', process.env.PORT || 5000);
-app.use(require("./api/test.js"));
 // Create an express server and a GraphQL endpoint
 app.use('/graphql', express_graphql({
   schema: graphqlSchema,
