@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 let database = null;
 
 async function startDatabase() {
-    const options = 'retryWrites=true&w=majority'
-    const uri = process.env.CONECTION_STRING+options
+    const OPTIONS = 'retryWrites=true&w=majority'
+    const uri = `mongodb+srv://${process.env.DATABASE_USER_PASSWORD}@${process.env.DATABASE_URL}/${process.env.DATABASE_NAME}?${OPTIONS}`
     const connection = await mongoose.connect(uri, {
       useNewUrlParser: true,
       useFindAndModify:false,
