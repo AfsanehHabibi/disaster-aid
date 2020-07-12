@@ -10,9 +10,10 @@ async function startDatabase() {
       useFindAndModify:false,
       useCreateIndex:true,
       useUnifiedTopology:true
-    });;
+    }).then(res => console.log("Connected to DB"))
+    .catch(err => console.log(err))
     database = mongoose.connection;
-    database.on('error',console.error.bind(console,'MongoDB connection error'))
+    //database.on('error',console.error.bind(console,'MongoDB connection error'))
 }
 
 async function getDatabase() {
