@@ -32,7 +32,6 @@ app.use(require("./api/test.js"));
 // Create an express server and a GraphQL endpoint
 app.use('/graphql', express_graphql({
   schema: graphqlSchema,
-  //rootValue: root,
   graphiql: true
 }));
 if (process.env.NODE_ENV === 'production') {

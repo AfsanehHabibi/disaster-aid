@@ -5,8 +5,10 @@ let database = null;
 async function startDatabase() {
     const uri = process.env.CONECTION_STRING
     const connection = await mongoose.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+      useNewUrlParser: true,
+      useFindAndModify:false,
+      useCreateIndex:true,
+      useUnifiedTopology:true
     });;
     database = mongoose.connection;
     database.on('error',console.error.bind(console,'MongoDB connection error'))

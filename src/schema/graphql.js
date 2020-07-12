@@ -1,18 +1,35 @@
 const mongoose = require('mongoose');
 const { composeWithMongoose } = require('graphql-compose-mongoose');
-const { schemaComposer } = require('graphql-compose');
+const { schemaComposer, toInputObjectType } = require('graphql-compose');
+const dot = require('dot-object');
 // STEP 1: DEFINE MONGOOSE SCHEMA AND MODEL
 const areaModel = require('../models/area').areaModel
 const formModel = require('../models/form').formModel
-
 
 // STEP 2: CONVERT MONGOOSE MODEL TO GraphQL PIECES
 const customizationOptions = {}; // left it empty for simplicity, described below
 const AreaTC = composeWithMongoose(areaModel, customizationOptions);
 const FormTC = composeWithMongoose(formModel, customizationOptions);
 
+//Input models, structures for match user input
+const InputITC = toInputObjectType(FormTC.getFieldOTC('filled_forms'));
+const FormITC = toInputObjectType(FormTC);
+
 // STEP 3: Add needed CRUD User operations to the GraphQL Schema
 // via graphql-compose it will be much much easier, with less typing
+
+//custom resolver for updating array
+FormTC.addResolver({
+  name: 'pushToArray',
+  type: FormTC,
+  args: { input: InputITC, filter: FormITC},
+  resolve: async ({ source, args, context, info }) => {   
+      return formModel.findOneAndUpdate(
+        dot.dot(JSON.parse(JSON.stringify(args.filter)))
+        ,{$push: {filled_forms: JSON.parse(JSON.stringify(args.input))}})
+        }
+})
+//predifined graphql-compose resolvers
 schemaComposer.Query.addFields({
   formById: FormTC.getResolver('findById'),
   formByIds: FormTC.getResolver('findByIds'),
@@ -24,6 +41,7 @@ schemaComposer.Query.addFields({
 });
 
 schemaComposer.Mutation.addFields({
+  formPushToFilled: FormTC.getResolver('pushToArray'),
   formCreateOne: FormTC.getResolver('createOne'),
   formCreateMany: FormTC.getResolver('createMany'),
   formUpdateById: FormTC.getResolver('updateById'),

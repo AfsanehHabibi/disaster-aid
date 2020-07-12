@@ -1,5 +1,16 @@
 let mongoose = require('mongoose')
 
+let formInputSchema = new mongoose.Schema({
+    fields: [{
+        name: {
+            type: String,
+            required: true,
+            unique: true,
+        },
+        value:String
+    }]
+})
+
 let formSchema = new mongoose.Schema({
     form_descriptor: {
         id: {
@@ -14,8 +25,7 @@ let formSchema = new mongoose.Schema({
         fields: [{
             name: {
                 type: String,
-                required: true,
-                unique: true,
+                required: true
             },
             title: {
                 type: String
@@ -35,16 +45,8 @@ let formSchema = new mongoose.Schema({
             }]
         }]
     },
-    filled_forms: {
-        fields: [{
-            name: {
-                type: String,
-                required: true,
-                unique: true,
-            },
-            value:String
-        }]
-    }
+    filled_forms: [formInputSchema]
 })
+
 
 exports.formModel = mongoose.model('Form', formSchema)
