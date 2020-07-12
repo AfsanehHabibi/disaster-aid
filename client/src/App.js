@@ -3,7 +3,7 @@ import 'App.css';
 import { FormClass } from 'component/form.js';
 import { LoadMoreList } from 'component/list.js';
 import { NotFound } from 'component/notFound.js';
-import  Login from 'component/Login.js';
+import  Login from 'component/login.js';
 import Profile from 'component/Profile.js';
 import { Layout, Menu, ConfigProvider, Radio } from 'antd';
 import {
@@ -44,6 +44,10 @@ class App extends React.Component {
                 <Radio.Button key="rtl" value="rtl">
                   RTL
             </Radio.Button>
+
+            <Radio.Button >
+                  <Login />
+            </Radio.Button>
               </Radio.Group>
             </div></Menu.Item>
           </Menu>
@@ -51,12 +55,12 @@ class App extends React.Component {
         <Content style={{ padding: '10vh 25vw 10vh 25vw' }}>
           <div className="site-layout-content" ><Switch>
             <Route exact path="/" >
-              <LoadMoreList />
+              <p>hello :)</p>
             </Route>
             <Route path='/form/:handle' component={FormClass}>
             </Route>
 
-            <Route path='/login' component={Login}>
+            <Route path='/login' >
             </Route>
             <Route path="/profile" component={Profile} />
             
