@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 let database = null;
 
 async function startDatabase() {
-    const uri = process.env.CONECTION_STRING
+    const options = 'retryWrites=true&w=majority'
+    const uri = process.env.CONECTION_STRING+options
     const connection = await mongoose.connect(uri, {
       useNewUrlParser: true,
       useFindAndModify:false,
