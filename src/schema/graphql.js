@@ -5,11 +5,12 @@ const dot = require('dot-object');
 // STEP 1: DEFINE MONGOOSE SCHEMA AND MODEL
 const areaModel = require('../models/area').areaModel
 const formModel = require('../models/form').formModel
-
+const testServerModel = require('../models/testServer').testServerModel
 // STEP 2: CONVERT MONGOOSE MODEL TO GraphQL PIECES
 const customizationOptions = {}; // left it empty for simplicity, described below
 const AreaTC = composeWithMongoose(areaModel, customizationOptions);
 const FormTC = composeWithMongoose(formModel, customizationOptions);
+const TestTC = composeWithMongoose(testServerModel, customizationOptions);
 
 //Input models, structures for match user input
 const InputITC = toInputObjectType(FormTC.getFieldOTC('filled_forms'));
@@ -29,6 +30,22 @@ FormTC.addResolver({
         ,{$push: {filled_forms: JSON.parse(JSON.stringify(args.input))}})
         }
 })
+
+TestTC.addResolver({
+  name: 'getServerStatus',
+  type: TestTC,
+  resolve: async ({ source, args, context, info }) => {   
+    return {
+      enviroment_variable:{
+          DATABASE_CLUESTER:process.env.DATABASE_CLUESTER,
+          DATABASE_USER_PASSWORD:process.env.DATABASE_USER_PASSWORD,
+          DATABASE_URL:process.env.DATABASE_URL,
+          DATABASE_NAME:process.env.DATABASE_NAME
+      },
+      isDatabase_connectd:mongoose.connection.readyState
+  }
+      }
+})
 //predifined graphql-compose resolvers
 schemaComposer.Query.addFields({
   formById: FormTC.getResolver('findById'),
@@ -38,6 +55,7 @@ schemaComposer.Query.addFields({
   formCount: FormTC.getResolver('count'),
   formConnection: FormTC.getResolver('connection'),
   formPagination: FormTC.getResolver('pagination'),
+  testInfo: TestTC.getResolver('getServerStatus')
 });
 
 schemaComposer.Mutation.addFields({
