@@ -37,10 +37,6 @@ TestTC.addResolver({
   resolve: async ({ source, args, context, info }) => {   
     return {
       enviroment_variable:{
-          DATABASE_CLUESTER:process.env.DATABASE_CLUESTER,
-          DATABASE_USER_PASSWORD:process.env.DATABASE_USER_PASSWORD,
-          DATABASE_URL:process.env.DATABASE_URL,
-          DATABASE_NAME:process.env.DATABASE_NAME
       },
       isDatabase_connectd:mongoose.connection.readyState
   }
