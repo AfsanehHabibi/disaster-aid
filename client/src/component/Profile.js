@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "reactstrap";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { LoadMoreList } from 'component/list.js';
-
-
 export const ProfileComponent = () => {
-  const { user } = useAuth0();
-  
+  const { user   } = useAuth0();
+
+ 
+
   var userJson=Object.values(user)
   var value=""
 
@@ -32,10 +32,12 @@ export const ProfileComponent = () => {
           <Col md>
             {value}
           </Col>
-        </Row>
+   
+      </Row>
      </Container>
     );
    }
 };
 
 export default withAuthenticationRequired(ProfileComponent);
+
