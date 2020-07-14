@@ -5,6 +5,7 @@ import { LoadMoreList } from 'component/list.js';
 import { NotFound } from 'component/notFound.js';
 import  Login from 'component/login.js';
 import Profile from 'component/Profile.js';
+import jwt from 'component/jwt';
 import { Layout, Menu, ConfigProvider, Radio } from 'antd';
 import {
   BrowserRouter as Router,
@@ -12,6 +13,7 @@ import {
   Route,
   Link
 } from "react-router-dom";
+
 const { Header, Content, Footer } = Layout;
 class App extends React.Component {
   state = {
@@ -29,6 +31,8 @@ class App extends React.Component {
     }
   };
   render() {
+
+
     const { direction, popupPlacement } = this.state;
     return (
       <Router><ConfigProvider direction={direction} popupPlacement={popupPlacement}><Layout className="layout">
@@ -64,6 +68,7 @@ class App extends React.Component {
             </Route>
             <Route path="/profile" component={Profile} />
             
+            <Route path="/get-jwt" component={jwt} />
             <Route path='*' exact={true} component={NotFound} />
           </Switch></div>
         </Content>
