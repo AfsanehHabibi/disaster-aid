@@ -7,7 +7,8 @@ let testServerSchema = new mongoose.Schema({
         DATABASE_URL:String,
         DATABASE_NAME:String
     },
-    isDatabase_connectd:String
+    isDatabase_connectd:String,
+    modelName:[String]
 })
 
 exports.testServerModel = mongoose.model('testServer',testServerSchema)
