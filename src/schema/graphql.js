@@ -23,31 +23,54 @@ const FormITC = toInputObjectType(FormTC);
 FormTC.addResolver({
   name: 'pushToArray',
   type: FormTC,
-  args: { input: InputITC, filter: FormITC},
-  resolve: async ({ source, args, context, info }) => {   
-      return formModel.findOneAndUpdate(
-        dot.dot(JSON.parse(JSON.stringify(args.filter)))
-        ,{$push: {filled_forms: JSON.parse(JSON.stringify(args.input))}})
-        }
+  args: { input: InputITC, filter: FormITC },
+  resolve: async ({ source, args, context, info }) => {
+    console.log(InputITC.getType())
+    return formModel.findOneAndUpdate(
+      dot.dot(JSON.parse(JSON.stringify(args.filter)))
+      , { $push: { filled_forms: JSON.parse(JSON.stringify(args.input)) } })
+  }
 })
 
 TestTC.addResolver({
   name: 'getServerStatus',
   type: TestTC,
-  resolve: async ({ source, args, context, info }) => {   
+  resolve: async ({ source, args, context, info }) => {
     return {
-      enviroment_variable:{
+      enviroment_variable: {
       },
-      isDatabase_connectd:mongoose.connection.readyState
+      isDatabase_connectd: mongoose.connection.readyState,
+      modelName: [InputITC.getType(),FormITC.getType()]
+    }
   }
-      }
+})
+FormTC.addResolver({
+  name: 'findOneLooseMatch',
+  type: FormTC,
+  args: { filter: FormITC },
+  resolve: async ({ source, args, context, info }) => {
+    return formModel.findOne(
+      dot.dot(JSON.parse(JSON.stringify(args.filter))))
+  }
+})
+
+FormTC.addResolver({
+  name: 'findManyLooseMatch',
+  type: [FormTC],
+  args: { filter: FormITC },
+  resolve: async ({ source, args, context, info }) => {
+    return formModel.find(
+      dot.dot(JSON.parse(JSON.stringify(args.filter))))
+  }
 })
 //predifined graphql-compose resolvers
 schemaComposer.Query.addFields({
   formById: FormTC.getResolver('findById'),
   formByIds: FormTC.getResolver('findByIds'),
   formOne: FormTC.getResolver('findOne'),
+  formOneLooseMatch: FormTC.getResolver('findOneLooseMatch'),
   formMany: FormTC.getResolver('findMany'),
+  formManyLooseMatch: FormTC.getResolver('findManyLooseMatch'),
   formCount: FormTC.getResolver('count'),
   formConnection: FormTC.getResolver('connection'),
   formPagination: FormTC.getResolver('pagination'),

@@ -5,7 +5,6 @@ import App from 'App';
 import * as serviceWorker from 'serviceWorker';
 import { Auth0Provider } from "@auth0/auth0-react";
 import { ApolloProvider } from '@apollo/react-hooks';
-import { ExchangeRates } from "component/form2";
 import {client} from "api/apolloClient"
 ReactDOM.render(
   <Auth0Provider
@@ -16,7 +15,7 @@ ReactDOM.render(
   >
   <ApolloProvider client={client}>
   <React.StrictMode>
-      <App /> 
+       <App />  
   </React.StrictMode>,
   </ApolloProvider>
   </Auth0Provider>,

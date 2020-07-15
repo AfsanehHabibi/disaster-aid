@@ -1,11 +1,11 @@
 import React from 'react';
 import 'App.css';
-import { FormClass } from 'component/form.js';
-import { LoadMoreList } from 'component/list.js';
+import { FormWrapper } from 'component/form.js';
 import { NotFound } from 'component/notFound.js';
 import  Login from 'component/login.js';
 import Profile from 'component/Profile.js';
 import jwt from 'component/jwt';
+import { AuthTest } from "component/authTest";
 import { Layout, Menu, ConfigProvider, Radio } from 'antd';
 import {
   BrowserRouter as Router,
@@ -61,7 +61,7 @@ class App extends React.Component {
             <Route exact path="/" >
               <p>hello :)</p>
             </Route>
-            <Route path='/form/:handle' component={FormClass}>
+            <Route path='/form/:handle' component={FormWrapper}>
             </Route>
 
             <Route path='/login' >
@@ -69,6 +69,7 @@ class App extends React.Component {
             <Route path="/profile" component={Profile} />
             
             <Route path="/get-jwt" component={jwt} />
+            <Route path="/test-auth" component={AuthTest} />
             <Route path='*' exact={true} component={NotFound} />
           </Switch></div>
         </Content>
