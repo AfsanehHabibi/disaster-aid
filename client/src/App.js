@@ -2,6 +2,7 @@ import React from 'react';
 import 'App.css';
 import { FormWrapper } from 'component/form.js';
 import { NotFound } from 'component/notFound.js';
+import {LoadList} from 'component/list';
 import  Login from 'component/login.js';
 import Profile from 'component/Profile.js';
 import jwt from 'component/jwt';
@@ -61,13 +62,10 @@ class App extends React.Component {
             <Route exact path="/" >
               <p>hello :)</p>
             </Route>
-            <Route path='/form/:handle' component={FormWrapper}>
-            </Route>
-
-            <Route path='/login' >
-            </Route>
+            <Route path='/forms' component={LoadList}/>
+            <Route path='/form/:handle' component={FormWrapper}/>
+            <Route path='/login' />
             <Route path="/profile" component={Profile} />
-            
             <Route path="/get-jwt" component={jwt} />
             <Route path="/test-auth" component={AuthTest} />
             <Route path='*' exact={true} component={NotFound} />

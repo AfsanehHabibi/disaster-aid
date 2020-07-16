@@ -19,3 +19,15 @@ export function formByIdDes(id) {
       }
         `;
 }
+export function formsIdTitle(params) {
+  return`
+  {
+    formMany{
+      form_descriptor{
+        id
+        title
+      }
+    }
+  }
+    `
+}
