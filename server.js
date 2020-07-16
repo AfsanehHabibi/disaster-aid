@@ -30,6 +30,8 @@ const logger = winston.createLogger({
     new winston.transports.File({ filename: path.join(__dirname, 'log/server.log') })
   ]
 });
+
+
 const checkJwt = jwt({
   // Dynamically provide a signing key
   // based on the kid in the header and 
@@ -46,11 +48,22 @@ const checkJwt = jwt({
   issuer: `https://dev-50-zt9d7.us.auth0.com/`,
   algorithms: ['RS256']
 });
+
 app.use(morgan(':req[header] :res[header] :method :url :response-time', { stream: requestLogStream }));
-app.get('/api/private',checkJwt,function(req,res){
-  console.debug(res.header)
-  res.json({message:"its fine"});
+
+app.get('/api/private',function(req,res){
+  var token = req.headers['authorization'];
+  console.log(token)
+  res.json(token);
 })
+/*
+app.use(function(err, req, res, next) {
+  if (err.name === "UnauthorizedError") {
+    return res.status(401).send({ msg: "Invalid token" });
+  }
+
+  next(err, req, res);
+});*/
 // checkJwt,
 app.set('port', process.env.PORT || 5000);
 // Create an express server and a GraphQL endpoint
