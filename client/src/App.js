@@ -6,6 +6,7 @@ import { NotFound } from 'component/notFound.js';
 import  Login from 'component/login.js';
 import Profile from 'component/Profile.js';
 import jwt from 'component/jwt';
+import  authTest from 'component/authTest';
 import { Layout, Menu, ConfigProvider, Radio } from 'antd';
 import {
   BrowserRouter as Router,
@@ -67,7 +68,7 @@ class App extends React.Component {
             <Route path='/login' >
             </Route>
             <Route path="/profile" component={Profile} />
-            
+            <Route path="/auth-test" component={authTest} />
             <Route path="/get-jwt" component={jwt} />
             <Route path='*' exact={true} component={NotFound} />
           </Switch></div>
