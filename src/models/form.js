@@ -4,10 +4,11 @@ let formInputSchema = new mongoose.Schema({
     fields: [{
         name: {
             type: String,
-            required: true,
-            unique: true,
+            required: true
         },
-        value:String
+        value:{
+            type: String
+        }
     }]
 })
 
@@ -19,8 +20,7 @@ let formSchema = new mongoose.Schema({
             unique: true,
         },
         title: {
-            type: String,
-            required: true
+            type: String
         },
         fields: [{
             name: {
