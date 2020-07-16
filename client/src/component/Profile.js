@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "reactstrap";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
-import { LoadMoreList } from 'component/list.js';
+import { LoadList } from 'component/list.js';
 export const ProfileComponent = () => {
   const { user   } = useAuth0();
 
@@ -17,7 +17,7 @@ export const ProfileComponent = () => {
   }
  
    if(value==="Field Agents"){
-    return  <LoadMoreList />
+    return  <LoadList />
    }else{
     return (
       <Container className="mb-5">
