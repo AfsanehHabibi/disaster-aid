@@ -6,11 +6,13 @@ const dot = require('dot-object');
 const areaModel = require('../models/area').areaModel
 const formModel = require('../models/form').formModel
 const testServerModel = require('../models/testServer').testServerModel
+//const formInputModel = require('../models/form').formInputModel
 // STEP 2: CONVERT MONGOOSE MODEL TO GraphQL PIECES
 const customizationOptions = {}; // left it empty for simplicity, described below
 const AreaTC = composeWithMongoose(areaModel, customizationOptions);
 const FormTC = composeWithMongoose(formModel, customizationOptions);
 const TestTC = composeWithMongoose(testServerModel, customizationOptions);
+//const FormInputTC = composeWithMongoose(formInputModel, customizationOptions);
 
 //Input models, structures for match user input
 const InputITC = toInputObjectType(FormTC.getFieldOTC('filled_forms'));
@@ -25,10 +27,50 @@ FormTC.addResolver({
   type: FormTC,
   args: { input: InputITC, filter: FormITC },
   resolve: async ({ source, args, context, info }) => {
-    console.log(InputITC.getType())
-    return formModel.findOneAndUpdate(
-      dot.dot(JSON.parse(JSON.stringify(args.filter)))
-      , { $push: { filled_forms: JSON.parse(JSON.stringify(args.input)) } })
+    let mapPointToArea = undefined;
+    let submittedForm = undefined;
+    let input = JSON.parse(JSON.stringify(args.input));
+    input._id = new mongoose.Types.ObjectId;
+    console.log(mongoose.isValidObjectId(input._id))
+    try {
+      const responseArray = await Promise.all(
+        input.fields.location_fields.map((element) => {
+          console.log(element.value)
+          point = element.value
+          return areaModel.find({
+            geometry: {
+              $geoIntersects:
+              {
+                $geometry: point
+              }
+            }
+          }, '_id')
+        })
+
+      );
+
+      input.fields.location_fields.forEach((element, index) => {
+      element.areas = responseArray[index]
+      });
+      submittedForm = await formModel.findOneAndUpdate(
+        dot.dot(JSON.parse(JSON.stringify(args.filter)))
+        , { $push: { filled_forms: input } })
+      console.debug(submittedForm)
+      let areasIdsFlat = responseArray.flat(1)
+      mapPointToArea = await areaModel.updateMany(
+        { _id: { $in: areasIdsFlat } },
+        { $push: { 'relations.point_in_area': input._id } },
+        { multi: true }
+      )
+    } catch (error) {
+      console.error(error)
+      return error
+    }finally{
+      if(mapPointToArea)
+        return submittedForm;
+      else 
+        return null;
+    }
   }
 })
 
@@ -40,10 +82,11 @@ TestTC.addResolver({
       enviroment_variable: {
       },
       isDatabase_connectd: mongoose.connection.readyState,
-      modelName: [InputITC.getType(),FormITC.getType()]
+      modelName: [InputITC.getType(), FormITC.getType()]
     }
   }
 })
+
 FormTC.addResolver({
   name: 'findOneLooseMatch',
   type: FormTC,
@@ -54,6 +97,21 @@ FormTC.addResolver({
   }
 })
 
+AreaTC.addResolver({
+  name: 'findPointInPolygon',
+  type: [AreaTC],
+  args: { input: InputITC },
+  resolve: async ({ source, args, context, info }) => {
+    return areaModel.find({
+      geometry: {
+        $geoIntersects:
+        {
+          $geometry:args.point
+        }
+      }
+    })
+  }
+})
 FormTC.addResolver({
   name: 'findManyLooseMatch',
   type: [FormTC],
@@ -97,6 +155,7 @@ schemaComposer.Query.addFields({
   areaCount: AreaTC.getResolver('count'),
   areaConnection: AreaTC.getResolver('connection'),
   areaPagination: AreaTC.getResolver('pagination'),
+  areaByPoint: AreaTC.getResolver('findPointInPolygon')
 });
 
 schemaComposer.Mutation.addFields({

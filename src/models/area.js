@@ -1,6 +1,5 @@
 let mongoose = require('mongoose')
 
-
 let areaSchema = new mongoose.Schema({
     type: {
         type: String,
@@ -33,11 +32,13 @@ let areaSchema = new mongoose.Schema({
             required: true
         },
         coordinates:
-            [{
-                lat: Number,
-                long: Number
-            }
-            ]
+        {
+            type: [[[Number]]], // Array of arrays of arrays of numbers
+            required: true
+        }
+    },
+    relations:{
+        point_in_area:[{ type: mongoose.Schema.Types.ObjectId, ref: 'FormFilled_forms' }]
     }
 })
 

@@ -10,12 +10,10 @@ const cors = require('cors');
 var express_graphql = require('express-graphql');
 var graphql = require('graphql');
 const { startDatabase } = require('./src/database/mongo');
-const areaModel = require('./src/models/area').areaModel
-const graphqlSchema = require('./src/schema/graphql')
+const graphqlSchema = require('./src/graphql/graphql')
 const jwt = require('express-jwt');
 const jwtAuthz = require('express-jwt-authz');
 const jwksRsa = require('jwks-rsa');
-const { get } = require('http');
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
@@ -51,20 +49,12 @@ const checkJwt = jwt({
 
 app.use(morgan(':req[header] :res[header] :method :url :response-time', { stream: requestLogStream }));
 
-app.get('/api/private',function(req,res){
-  var token = req.headers['authorization'];
+app.get('/api/private',checkJwt,function(req,res){
+  var token = req.headers['Authorization'];
   console.log(token)
   res.json(token);
 })
-/*
-app.use(function(err, req, res, next) {
-  if (err.name === "UnauthorizedError") {
-    return res.status(401).send({ msg: "Invalid token" });
-  }
 
-  next(err, req, res);
-});*/
-// checkJwt,
 app.set('port', process.env.PORT || 5000);
 // Create an express server and a GraphQL endpoint
 app.use('/graphql', express_graphql({
