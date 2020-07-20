@@ -53,7 +53,8 @@ export class SimpleMap extends Component {
       latestLat: lat,
       latestLng: lng
     })
-    this.handleChange(`{"lat":"${lat}","long":"${lng}"}`);
+    //this.handleChange(`{"lat":"${lat}","long":"${lng}"}`);
+    this.handleChange(`[${lng},${lat}]`);
   }
 
   render() {
