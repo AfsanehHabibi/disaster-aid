@@ -3,6 +3,7 @@ import 'App.css';
 import { FormWrapper } from 'component/form.js';
 import { NotFound } from 'component/notFound.js';
 import {LoadList} from 'component/list';
+import {FormList} from 'component/controlCentre';
 import  Login from 'component/login.js';
 import Profile from 'component/Profile.js';
 import jwt from 'component/jwt';
@@ -68,6 +69,7 @@ class App extends React.Component {
             <Route path="/profile" component={Profile} />
             <Route path="/get-jwt" component={jwt} />
             <Route path="/test-auth" component={AuthTest} />
+            <Route path="/controlCentre" component={FormList} />
             <Route path='*' exact={true} component={NotFound} />
           </Switch></div>
         </Content>

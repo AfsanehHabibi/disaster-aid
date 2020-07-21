@@ -2,5 +2,5 @@ import React from 'react';
 import ApolloClient from 'apollo-boost';
 
 export const client = new ApolloClient({
-  uri: 'http://localhost:5000/graphql',
+  uri: 'https://shrouded-garden-53962.herokuapp.com/graphql',
 });
