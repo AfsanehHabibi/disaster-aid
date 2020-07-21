@@ -29,25 +29,19 @@ const Login = () => {
     isAuthenticated,
     getAccessToken,
     loginWithRedirect,
+    getAccessTokenSilently,
     logout,
   } = useAuth0();
 
-  const auth = useAuth0();
-  const [accessToken, setAccessToken] = useState("");
 
-  useEffect(() => {
-    async function getAccessToken() {
-      try {
-        const token = await isAuthenticated?.getTokenSilently();
-        setAccessToken(token);
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    getAccessToken();
-  }, []);
-
+async function getToken() {
+  if(isAuthenticated){
+  getAccessTokenSilently().then((token)=>{
+    console.log(token)
+    localStorage.setItem('token',token)
+  })
+}
+}
   const logoutWithRedirect = () =>
     logout({
       returnTo: "http://localhost:3000",
@@ -90,7 +84,7 @@ const Login = () => {
   return (
     <div >
 
-        {isAuthenticated && (
+        {isAuthenticated && getToken() &&(
           <div>
            <Dropdown overlay={menu}>
               <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
