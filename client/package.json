@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.2.1",
+    "@apollo/client": "^3.0.2",
     "@apollo/react-hooks": "^3.1.5",
     "@auth0/auth0-react": "^1.0.0",
     "@auth0/auth0-spa-js": "^1.10.0",
@@ -50,5 +51,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5000"
+  "proxy": "localhost:5000"
 }

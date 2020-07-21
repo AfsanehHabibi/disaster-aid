@@ -1,4 +1,10 @@
 const mongoose = require('mongoose');
+const {GraphQLString,GraphQLNonNull,GraphQLInputObjectType} = require('graphql')
+/* import {
+  GraphQLString,
+  GraphQLInputObjectType,
+  GraphQLNonNull,
+} from 'graphql'; */
 const { composeWithMongoose } = require('graphql-compose-mongoose');
 const { schemaComposer, toInputObjectType } = require('graphql-compose');
 const dot = require('dot-object');
@@ -15,6 +21,19 @@ const TestTC = composeWithMongoose(testServerModel, customizationOptions);
 //const FormInputTC = composeWithMongoose(formInputModel, customizationOptions);
 
 //Input models, structures for match user input
+const DoubleId = new GraphQLInputObjectType({
+  name: 'DoubleIdInput',
+  description: 'Input for ids',
+  fields: () => ({
+    form_id: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
+    filled_id: {
+      type: new GraphQLNonNull(GraphQLString),
+    }
+  }),
+});
+
 const InputITC = toInputObjectType(FormTC.getFieldOTC('filled_forms'));
 const FormITC = toInputObjectType(FormTC);
 
@@ -78,6 +97,7 @@ TestTC.addResolver({
   name: 'getServerStatus',
   type: TestTC,
   resolve: async ({ source, args, context, info }) => {
+    console.log("kkkkkkkkkkkkkkkkkkkk")
     return {
       enviroment_variable: {
       },
@@ -115,10 +135,36 @@ AreaTC.addResolver({
 FormTC.addResolver({
   name: 'findManyLooseMatch',
   type: [FormTC],
-  args: { filter: FormITC },
+  args: {  },
   resolve: async ({ source, args, context, info }) => {
     return formModel.find(
       dot.dot(JSON.parse(JSON.stringify(args.filter))))
+  }
+})
+
+FormTC.addResolver({
+  name: 'findSubById',
+  type: FormTC.getFieldOTC('filled_forms'),
+  args: {filter:DoubleId},
+  resolve: async ({source,args,context,info}) => {
+    console.log(args.filter)
+    let input=JSON.parse(JSON.stringify(args.filter))
+    let res=null;
+    try {
+      res=await formModel.findOne({'form_descriptor.id':args.filter.form_id}
+    ,
+    {'filled_forms':{
+      $elemMatch:{
+        '_id':args.filter.filled_id
+      }
+    }}
+      )
+    console.log("tha")
+    } catch (error) {
+      console.log(error)
+    }
+    console.log(res)
+    return res.filled_forms[0];
   }
 })
 //predifined graphql-compose resolvers
@@ -132,7 +178,8 @@ schemaComposer.Query.addFields({
   formCount: FormTC.getResolver('count'),
   formConnection: FormTC.getResolver('connection'),
   formPagination: FormTC.getResolver('pagination'),
-  testInfo: TestTC.getResolver('getServerStatus')
+  testInfo: TestTC.getResolver('getServerStatus'),
+  formFilledById: FormTC.getResolver('findSubById')
 });
 
 schemaComposer.Mutation.addFields({

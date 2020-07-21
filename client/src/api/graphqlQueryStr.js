@@ -31,3 +31,80 @@ export function formsIdTitle(params) {
   }
     `
 }
+export function formByIdAll(id) {
+  return `{
+    formOneLooseMatch(filter:{form_descriptor:{id:"${id}"}}){
+      form_descriptor{
+        title
+        id
+        fields{
+        options{
+          label
+          value
+        }
+          required
+          type
+          name
+          title
+      }
+      }
+    filled_forms{
+      _id
+      fields{
+        date_fields{
+          name
+          value
+        }
+        location_fields{
+          name
+          value{
+            type
+            coordinates
+          }
+          areas
+        }
+        text_fields{
+          name
+          value
+        }
+        number_fields{
+          name
+          value
+        }
+      }
+    }
+    }
+  }
+    `;
+}
+export function filledFormByIdALL(filled_id,form_id) {
+  return`{
+    formFilledById(filter:{
+      form_id:"${form_id}",
+      filled_id:"${filled_id}"
+    }){
+      fields{
+        date_fields{
+          name
+          value
+        }
+        location_fields{
+          name
+          value{
+            type
+            coordinates
+          }
+          areas
+        }
+        text_fields{
+          name
+          value
+        }
+        number_fields{
+          name
+          value
+        }
+      }
+    }
+  }`
+}
