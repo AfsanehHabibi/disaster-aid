@@ -108,3 +108,10 @@ export function filledFormByIdALL(filled_id,form_id) {
     }
   }`
 }
+export function testInfo(){
+  return `{
+    testInfo{
+      isDatabase_connectd
+    }
+  }`;
+}
