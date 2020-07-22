@@ -3,7 +3,7 @@ import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
 const httpLink = createHttpLink({
-  uri:'/graphql' //'http://localhost:5000/graphql',
+  uri: 'https://shrouded-garden-53962.herokuapp.com/graphql',//'http://localhost:5000/graphql',
 });
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
@@ -18,12 +18,7 @@ const authLink = setContext((_, { headers }) => {
     }
   }
 });
-export const client = new ApolloClient({
-<<<<<<< HEAD
-  uri: 'https://shrouded-garden-53962.herokuapp.com/graphql',
-=======
-  //uri: 'http://localhost:5000/graphql',
+export const client = new ApolloClient({  
   link: authLink.concat(httpLink),
   cache: new InMemoryCache()
->>>>>>> 96cffb986e681f4b0b1043e4a3ef41155bc926d2
 });
