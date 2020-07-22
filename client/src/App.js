@@ -5,6 +5,7 @@ import { NotFound } from 'component/notFound.js';
 import {LoadList} from 'component/list';
 import {FormList} from 'component/controlCentre';
 import { SummaryTable } from 'component/summaryTable';
+import { MainPage } from "component/mainPage";
 import  Login from 'component/login.js';
 import Profile from 'component/Profile.js';
 import jwt from 'component/jwt';
@@ -67,7 +68,7 @@ class App extends React.Component {
         <Content style={{ padding: '10vh 25vw 10vh 25vw' }}>
           <div className="site-layout-content" ><Switch>
             <Route exact path="/" >
-              <p>hello :)</p>
+              <MainPage/>
             </Route>
             <Route path='/forms' component={LoadList}/>
             <Route path='/form/:handle' component={FormWrapper}/>
