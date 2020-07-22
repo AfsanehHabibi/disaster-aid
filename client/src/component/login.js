@@ -47,51 +47,15 @@ async function getToken() {
       returnTo: `${process.env.REACT_APP_PUBLIC_URL}`,
     });
 
-  const menu = (
-    <Menu>
-
-      <Menu.Item>
-        <Button
-        tag={RouterNavLink}
-        to="/profile"
-        className="dropdown-profile"
-        activeClassName="router-link-exact-active"
-        >
-        <FontAwesomeIcon icon="user" className="mr-3" /> Profile
-        </Button>
-      </Menu.Item>
-
-      <Menu.Item>
-        <a
-        onClick={() => logoutWithRedirect()}
-        >
-        <FontAwesomeIcon icon="power-off" className="mr-3" /> Log out
-        </a>
-      </Menu.Item>
-      <Menu.Item>
-        <Button
-        tag={RouterNavLink}
-        to="/get-jwt"
-        exact
-        activeClassName="router-link-exact-active"
-        >
-          get jwt
-        </Button>
-      </Menu.Item>
-      </Menu>
-  );
-
   return (
     <div >
 
         {isAuthenticated && getToken() &&(
           <div>
-           <Dropdown overlay={menu}>
-              <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-               detail <DownOutlined />
-              </a>
-            </Dropdown>
-            </div>
+            <a onClick={() => logoutWithRedirect()}>
+               <FontAwesomeIcon icon="power-off" className="mr-3" /> Log out
+            </a> 
+          </div>
         )}
 
         {!isAuthenticated && (
