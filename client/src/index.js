@@ -10,7 +10,7 @@ ReactDOM.render(
   <Auth0Provider
     domain= "dev-50-zt9d7.us.auth0.com"
     clientId= "4uD40BOHBbyrO5E3NjsF4osdeTb5sJPz"
-    redirectUri="http://localhost:3000/login"
+    redirectUri="https://shrouded-garden-53962.herokuapp.com/login"
     audience= "DisasterAidApi"
   >
   <ApolloProvider client={client}>
