@@ -38,12 +38,12 @@ const checkJwt = jwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: `https://dev-50-zt9d7.us.auth0.com/.well-known/jwks.json`
+    jwksUri: `${process.env.JWT_ISSUER}.well-known/jwks.json`
   }),
 
   // Validate the audience and the issuer.
   audience: 'DisasterAidApi',
-  issuer: `https://dev-50-zt9d7.us.auth0.com/`,
+  issuer: `${process.env.JWT_ISSUER}`,
   algorithms: ['RS256']
 });
 
