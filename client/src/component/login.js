@@ -44,7 +44,7 @@ async function getToken() {
 }
   const logoutWithRedirect = () =>
     logout({
-      returnTo: "/",
+      returnTo: `${process.env.PUBLIC_URL}`,
     });
 
   const menu = (
@@ -96,7 +96,7 @@ async function getToken() {
 
         {!isAuthenticated && (
            <a
-           onClick={() => loginWithRedirect({})}
+           onClick={() => loginWithRedirect({returnTo: `${process.env.PUBLIC_URL}/login`})}
            >
               Log in
            </a>
