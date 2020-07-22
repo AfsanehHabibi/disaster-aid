@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "reactstrap";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { LoadList } from 'component/list.js';
+import {FormList} from 'component/controlCentre';
+
 export const ProfileComponent = () => {
   const { user   } = useAuth0();
 
@@ -18,6 +20,8 @@ export const ProfileComponent = () => {
  
    if(value==="Field Agents"){
     return  <LoadList />
+   }else if(value ==="Control Centre Agent"){
+    return  <FormList />
    }else{
     return (
       <Container className="mb-5">
