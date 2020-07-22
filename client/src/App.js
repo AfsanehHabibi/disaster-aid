@@ -4,19 +4,22 @@ import { FormWrapper } from 'component/form.js';
 import { NotFound } from 'component/notFound.js';
 import {LoadList} from 'component/list';
 import {FormList} from 'component/controlCentre';
+import { SummaryTable } from 'component/summaryTable';
 import  Login from 'component/login.js';
 import Profile from 'component/Profile.js';
 import jwt from 'component/jwt';
 import { AuthTest } from "component/authTest";
-import { Layout, Menu, ConfigProvider, Radio } from 'antd';
+import { Layout, Menu, ConfigProvider, Radio  } from 'antd';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Link
 } from "react-router-dom";
+import { CloseOutlined } from '@ant-design/icons';
 
 const { Header, Content, Footer } = Layout;
+
 class App extends React.Component {
   state = {
     direction: 'ltr',
@@ -41,21 +44,24 @@ class App extends React.Component {
         <Header>
           <div className="logo" />
           <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
-            <Menu.Item key="1"><Link to={`/`}>Home</Link></Menu.Item>
-            <Menu.Item key="2"><div >
+            <Menu.Item key="1" style={{backgroundColor:'blue' }}><Link to={`/`}>Home</Link></Menu.Item>
+            <Menu.Item key="2">
               <Radio.Group defaultValue="ltr" onChange={this.changeDirection}>
                 <Radio.Button key="ltr" value="ltr">
                   LTR
-            </Radio.Button>
+                </Radio.Button>
                 <Radio.Button key="rtl" value="rtl">
                   RTL
-            </Radio.Button>
-
-            <Radio.Button >
-                  <Login />
-            </Radio.Button>
+                </Radio.Button>
               </Radio.Group>
-            </div></Menu.Item>
+            </Menu.Item>
+            <Menu.Item key="3" >
+            <Radio.Group >
+              <Radio.Button >
+                  <Login />
+              </Radio.Button>
+              </Radio.Group>
+            </Menu.Item>
           </Menu>
         </Header>
         <Content style={{ padding: '10vh 25vw 10vh 25vw' }}>
@@ -65,8 +71,8 @@ class App extends React.Component {
             </Route>
             <Route path='/forms' component={LoadList}/>
             <Route path='/form/:handle' component={FormWrapper}/>
-            <Route path='/login' />
-            <Route path="/profile" component={Profile} />
+            <Route path='/summary/form/:handle' component={SummaryTable}/>
+            <Route path='/login' component={Profile}/>
             <Route path="/get-jwt" component={jwt} />
             <Route path="/test-auth" component={AuthTest} />
             <Route path="/controlCentre" component={FormList} />
