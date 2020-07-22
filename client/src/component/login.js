@@ -44,7 +44,7 @@ async function getToken() {
 }
   const logoutWithRedirect = () =>
     logout({
-      returnTo: REACT_APP_ENV=='dev' ? "http://localhost:3000":"/",
+      returnTo: process.env.REACT_APP_ENV=='dev' ? "http://localhost:3000":"/",
     });
 
   const menu = (
