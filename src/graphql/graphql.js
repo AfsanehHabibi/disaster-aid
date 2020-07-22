@@ -1,10 +1,5 @@
 const mongoose = require('mongoose');
 const {GraphQLString,GraphQLNonNull,GraphQLInputObjectType} = require('graphql')
-/* import {
-  GraphQLString,
-  GraphQLInputObjectType,
-  GraphQLNonNull,
-} from 'graphql'; */
 const { composeWithMongoose } = require('graphql-compose-mongoose');
 const { schemaComposer, toInputObjectType } = require('graphql-compose');
 const dot = require('dot-object');
