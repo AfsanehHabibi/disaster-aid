@@ -7,9 +7,6 @@ import { formsIdTitle } from 'api/graphqlQueryStr';
 import { NotFound } from 'component/notFound';
 import gql from "graphql-tag";
 
-const axios = require('axios').default;
-const count = 3;
-const fakeDataUrl = `https://secret-chamber-63894.herokuapp.com/api/forms`;
 
 export let LoadList = (props) => {
   const { loading:initLoading , error, data:receivedData } = useQuery(gql(formsIdTitle()))

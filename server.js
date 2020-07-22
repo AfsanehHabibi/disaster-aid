@@ -49,18 +49,18 @@ const checkJwt = jwt({
 
 app.use(morgan(':req[header] :res[header] :method :url :response-time', { stream: requestLogStream }));
 
-app.get('/api/private',checkJwt,function(req,res){
-  var token = req.headers['Authorization'];
-  console.log(token)
-  res.json(token);
-})
 
 app.set('port', process.env.PORT || 5000);
 // Create an express server and a GraphQL endpoint
-app.use('/graphql',checkJwt, express_graphql({
-  schema: graphqlSchema,
-  graphiql: true
-}));
+app.use('/graphql', checkJwt, express_graphql(
+  req => ({
+    schema:graphqlSchema,
+    graphiql: true,
+    context: {
+      user: req.user
+    }
+  }
+  )));
 if (process.env.NODE_ENV === 'production') {
   // Serve any static files
   app.use(express.static(path.join(__dirname, 'client/build')));

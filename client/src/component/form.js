@@ -85,8 +85,10 @@ export let FormHook = (props) => {
 
   if (loading)
     return (<div><Spin tip="Loading..." size="large" /></div>);
-  if (error)
+  if (error){
+    console.debug(error)
     return (<NotFound />);
+  }
   try {
     let temp = data.formOneLooseMatch.form_descriptor
   } catch (error) {

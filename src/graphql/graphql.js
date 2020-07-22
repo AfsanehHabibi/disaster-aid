@@ -46,6 +46,8 @@ FormTC.addResolver({
   type: FormTC,
   args: { input: InputITC, filter: FormITC },
   resolve: async ({ source, args, context, info }) => {
+    if(!context.user.permissions.includes('create:form-filled'))
+      return new Error("you are not authorized for this!");
     let mapPointToArea = undefined;
     let submittedForm = undefined;
     let input = JSON.parse(JSON.stringify(args.input));
@@ -97,7 +99,7 @@ TestTC.addResolver({
   name: 'getServerStatus',
   type: TestTC,
   resolve: async ({ source, args, context, info }) => {
-    console.log("kkkkkkkkkkkkkkkkkkkk")
+    console.log(context.user)
     return {
       enviroment_variable: {
       },
@@ -112,6 +114,8 @@ FormTC.addResolver({
   type: FormTC,
   args: { filter: FormITC },
   resolve: async ({ source, args, context, info }) => {
+    if(!context.user.permissions.includes('read:form-filled') || !context.user.permissions.includes('read:form-descriptor'))
+      return new Error("you are not authorized for this!");
     return formModel.findOne(
       dot.dot(JSON.parse(JSON.stringify(args.filter))))
   }
@@ -122,6 +126,8 @@ AreaTC.addResolver({
   type: [AreaTC],
   args: { input: InputITC },
   resolve: async ({ source, args, context, info }) => {
+    if(!context.user.permissions.includes('read:area'))
+      return new Error("you are not authorized for this!");
     return areaModel.find({
       geometry: {
         $geoIntersects:
@@ -135,8 +141,10 @@ AreaTC.addResolver({
 FormTC.addResolver({
   name: 'findManyLooseMatch',
   type: [FormTC],
-  args: {  },
+  args: { filter:FormITC},
   resolve: async ({ source, args, context, info }) => {
+    if(!context.user.permissions.includes('read:form-filled') || !context.user.permissions.includes('read:form-descriptor'))
+      return new Error("you are not authorized for this!");
     return formModel.find(
       dot.dot(JSON.parse(JSON.stringify(args.filter))))
   }
@@ -147,6 +155,8 @@ FormTC.addResolver({
   type: FormTC.getFieldOTC('filled_forms'),
   args: {filter:DoubleId},
   resolve: async ({source,args,context,info}) => {
+    if(!context.user.permissions.includes('read:form-filled') || !context.user.permissions.includes('read:form-descriptor'))
+      return new Error("you are not authorized for this!")
     console.log(args.filter)
     let input=JSON.parse(JSON.stringify(args.filter))
     let res=null;
