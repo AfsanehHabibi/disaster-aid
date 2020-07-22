@@ -3,7 +3,7 @@ import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 
 const httpLink = createHttpLink({
-  uri:'/graphql' //'http://localhost:5000/graphql',
+  uri: '/graphql',//'http://localhost:5000/graphql',
 });
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists
@@ -18,8 +18,8 @@ const authLink = setContext((_, { headers }) => {
     }
   }
 });
+
 export const client = new ApolloClient({
-  //uri: 'http://localhost:5000/graphql',
   link: authLink.concat(httpLink),
   cache: new InMemoryCache()
 });
