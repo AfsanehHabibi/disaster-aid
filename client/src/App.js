@@ -5,9 +5,9 @@ import { NotFound } from 'component/notFound.js';
 import {LoadList} from 'component/list';
 import {FormList} from 'component/controlCentre';
 import { SummaryTable } from 'component/summaryTable';
+import Descript from 'component/descript';
 import { MainPage } from "component/mainPage";
 import  Login from 'component/login.js';
-import Profile from 'component/Profile.js';
 import jwt from 'component/jwt';
 import { AuthTest } from "component/authTest";
 import { Layout, Menu, ConfigProvider, Radio  } from 'antd';
@@ -73,7 +73,7 @@ class App extends React.Component {
             <Route path='/forms' component={LoadList}/>
             <Route path='/form/:handle' component={FormWrapper}/>
             <Route path='/summary/form/:handle' component={SummaryTable}/>
-            <Route path='/login' component={Profile}/>
+            <Route path='/login' component={Descript}/>
             <Route path="/get-jwt" component={jwt} />
             <Route path="/test-auth" component={AuthTest} />
             <Route path="/controlCentre" component={FormList} />
