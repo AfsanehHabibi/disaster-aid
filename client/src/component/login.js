@@ -5,14 +5,10 @@ import { useAuth0 } from "@auth0/auth0-react";
 const Login = () => {
   
   const {
-    user,
     isAuthenticated,
-    getAccessToken,
     loginWithRedirect,
     getAccessTokenSilently,
-    logout,
   } = useAuth0();
-
 
   async function getToken() {
     if(isAuthenticated){

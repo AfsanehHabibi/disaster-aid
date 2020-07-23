@@ -4,31 +4,12 @@ import { NavLink as RouterNavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Menu, Dropdown } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-
-import {
-    Collapse,
-    Container,
-    Navbar,
-    NavbarToggler,
-    NavbarBrand,
-    Nav,
-    NavItem,
-    NavLink,
-    Button,
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
-  } from "reactstrap";
+import {Button} from "reactstrap";
 
 export const Detail = () => {
 
   const {
     user,
-    isAuthenticated,
-    getAccessToken,
-    loginWithRedirect,
-    getAccessTokenSilently,
     logout,
   } = useAuth0();
 
@@ -44,22 +25,22 @@ export const Detail = () => {
   var secondpath=""
 
   for(var i=0; i<4 ; i++){
-        if(userJson[i]!="noting"){
-            firstvalue=userJson[i]
-        }
+     if(userJson[i]!="noting"){
+        firstvalue=userJson[i]
+     }
   }
  
   if(firstvalue==="Field Agents"){
-    firstvalue = "report";
-    firstpath = "/forms";
+     firstvalue = "report";
+     firstpath = "/forms";
    }else if(firstvalue ==="Control Centre Agent"){
-    firstvalue = "summery";
-    firstpath ="/controlCentre";
+     firstvalue = "summery";
+     firstpath ="/controlCentre";
    }else if(firstvalue ==="Admin"){
-    firstvalue = "report";
-    firstpath = "/forms";
-    secondvalue = "summery";
-    secondpath ="/controlCentre";
+     firstvalue = "report";
+     firstpath = "/forms";
+     secondvalue = "summery";
+     secondpath ="/controlCentre";
    }
 
   const menu = (
