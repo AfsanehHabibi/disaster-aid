@@ -5,7 +5,7 @@ import { Spin, Alert, message } from 'antd';
 import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import { formByIdAll } from "api/graphqlQueryStr";
-import { Table} from 'antd';
+import { Table, PageHeader} from 'antd';
 
 
 export class SummaryTable extends React.Component {
@@ -57,10 +57,25 @@ export class SummaryTable extends React.Component {
         showIcon
       />)
 
-    const columns = formDescriptor.fields.map((answer, i) => {
-      return ({title :  answer.title , dataIndex : answer.name })
+    const num_of_columns = formDescriptor.fields.length;
+    let isNumber = new Array(num_of_columns);
+    let numberIndex = new Array(num_of_columns);
+    let hasAnyNumber = false;
+
+    const columns = formDescriptor.fields.map((field, i) => {
+      if(field.type === "Number"){
+        hasAnyNumber = true;
+        isNumber[i] = true;
+        numberIndex[i] = field.name;
+      }else{
+        isNumber[i] = false;
+        numberIndex[i] = "";
+      }
+      return ({title :  field.title , dataIndex : field.name })
     })
     console.log(columns);
+    console.log(isNumber);
+    console.log(numberIndex)
 
     const rowdata = filledForms.map((filledForm , index)=>{
       let f = filledForm.fields;
@@ -97,12 +112,38 @@ export class SummaryTable extends React.Component {
       return t;
     
     })
+
+    //calculate sum for number fields
+    let sum = new Array(num_of_columns);
+    for(let col = 0; col < num_of_columns; col++){
+      if(isNumber[col] === true){
+        sum[col] = 0;
+        rowdata.map((row, index)=>{
+          sum[col] += row[numberIndex[col]];
+        })
+      }else{
+        sum[col] = "";
+      }
+    }
     
+    console.log('sum \t',sum)
     return (<div>
-      <div>{formDescriptor.title }</div>
+      <PageHeader
+      className="site-page-header"
+      title= {formDescriptor.title }
+      />,
+      
       <Table
         columns = {columns}
         dataSource = {rowdata}
+        summary ={() =>(
+          <Table.Summary.Row style={{ background: '#d9d9d9'}}>
+            {sum.map((s , i)=>{
+              return (<Table.Summary.Cell > {s} </Table.Summary.Cell>)
+            })}
+
+          </Table.Summary.Row>
+        )}
       />
     </div>);
   }
