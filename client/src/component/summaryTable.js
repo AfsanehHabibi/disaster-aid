@@ -5,7 +5,8 @@ import { Spin, Alert, message } from 'antd';
 import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import { formByIdAll } from "api/graphqlQueryStr";
-import { Table, PageHeader} from 'antd';
+import { Table, PageHeader,Button} from 'antd';
+import { ExportToCsv } from 'ts-export-to-csv';
 
 
 export class SummaryTable extends React.Component {
@@ -74,8 +75,6 @@ export class SummaryTable extends React.Component {
       return ({title :  field.title , dataIndex : field.name })
     })
     console.log(columns);
-    console.log(isNumber);
-    console.log(numberIndex)
 
     const rowdata = filledForms.map((filledForm , index)=>{
       let f = filledForm.fields;
@@ -126,7 +125,6 @@ export class SummaryTable extends React.Component {
       }
     }
     
-    console.log('sum \t',sum)
     return (<div>
       <PageHeader
       className="site-page-header"
@@ -137,15 +135,29 @@ export class SummaryTable extends React.Component {
         columns = {columns}
         dataSource = {rowdata}
         summary ={() =>(
+          hasAnyNumber === true ?
           <Table.Summary.Row style={{ background: '#d9d9d9'}}>
             {sum.map((s , i)=>{
               return (<Table.Summary.Cell > {s} </Table.Summary.Cell>)
-            })}
-
-          </Table.Summary.Row>
+            })} 
+          </Table.Summary.Row> : null
         )}
       />
+      <Button type="primary" onClick = {()=>export_csv(rowdata)} >
+          export csv
+      </Button>
     </div>);
   }
 
+  function export_csv(data_arr){
+    const options = { 
+      fieldSeparator: ',',
+      showLabels: true, 
+      showTitle: true,
+      title: 'Summary Table',
+      useKeysAsHeaders: true,
+    };
+    const csvExporter = new ExportToCsv(options);
+    csvExporter.generateCsv(data_arr);
+  }
   
