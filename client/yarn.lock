@@ -11168,6 +11168,11 @@ tr46@^1.0.1:
   dependencies:
     punycode "^2.1.0"
 
+ts-export-to-csv@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.yarnpkg.com/ts-export-to-csv/-/ts-export-to-csv-0.3.3.tgz#4b7da7a47dce3e90b0bb927aa65c992b5b0cddd9"
+  integrity sha512-V9it6HaDCg/WdtOSxiPGEnmGBqXPHup7q8fcWInT6tEhVvg09y60hmUriXvbplBv7B1DZqdNxV+VKJYTc4S24A==
+
 ts-invariant@^0.4.0, ts-invariant@^0.4.4:
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/ts-invariant/-/ts-invariant-0.4.4.tgz#97a523518688f93aafad01b0e80eb803eb2abd86"
