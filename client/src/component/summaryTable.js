@@ -48,56 +48,6 @@ export class SummaryTable extends React.Component {
     let formDescriptor = data.formOneLooseMatch.form_descriptor
     let filledForms = data.formOneLooseMatch.filled_forms
 
-    const columns = formDescriptor.fields.map((answer, i) => {
-      return ({title :  answer.title , dataIndex : answer.name })
-    })
-    console.log(columns);
-
-    let t = {};
-    
-    let rowdata = filledForms.map((filledForm , index)=>{
-      let f = filledForm.fields;
-      if(f.date_fields!==undefined  &&  f.date_fields !== null){
-        flag = true;
-        f.date_fields.map((date_field , i)=>{
-          let key = date_field.name;
-          let val = date_field.value;
-          t[key] = val;
-        })
-      }
-      if(f.text_fields!==undefined  &&  f.text_fields !== null){
-        flag = true;
-        f.text_fields.map((text_field , i)=>{
-          let key = text_field.name;
-          let val = text_field.value;
-          t[key] = val;
-        })
-      }
-      if(f.number_fields!==undefined  &&  f.number_fields !== null){
-        flag = true;
-        f.number_fields.map((number_field , i)=>{
-          let key = number_field.name;
-          let val = number_field.value;
-          t[key] = val;
-          console.log(val)
-        })
-      }
-      if(f.location_fields!==undefined  &&  f.location_fields !== null){
-        flag = true;
-        f.location_fields.map((loc_field , i)=>{
-          let key = loc_field.name;
-          let val = loc_field.value.coordinates;
-          t[key] = val;
-          console.log(val)
-        })
-      }
-      console.log(t)
-      return t
-    
-    })
-
-    console.log('data '+rowdata)
-
     console.debug(formDescriptor)
     if (!formDescriptor.fields)
       return (<Alert
@@ -106,13 +56,54 @@ export class SummaryTable extends React.Component {
         type="error"
         showIcon
       />)
+
+    const columns = formDescriptor.fields.map((answer, i) => {
+      return ({title :  answer.title , dataIndex : answer.name })
+    })
+    console.log(columns);
+
+    const rowdata = filledForms.map((filledForm , index)=>{
+      let f = filledForm.fields;
+      let t = {};
+      if(f.date_fields!==undefined  &&  f.date_fields !== null){
+        f.date_fields.map((date_field , i)=>{
+          let key = date_field.name;
+          let val = date_field.value;
+          t[key] = val;
+        })
+      }
+      if(f.text_fields!==undefined  &&  f.text_fields !== null){
+        f.text_fields.map((text_field , i)=>{
+          let key = text_field.name;
+          let val = text_field.value;
+          t[key] = val;
+        })
+      }
+      if(f.number_fields!==undefined  &&  f.number_fields !== null){
+        f.number_fields.map((number_field , i)=>{
+          let key = number_field.name;
+          let val = number_field.value;
+          t[key] = val;
+        })
+      }
+      if(f.location_fields!==undefined  &&  f.location_fields !== null){
+        f.location_fields.map((loc_field , i)=>{
+          let key = loc_field.name;
+          let val = loc_field.value.coordinates;
+          t[key] = val;
+        })
+      }
+
+      return t;
+    
+    })
+    
     return (<div>
       <div>{formDescriptor.title }</div>
       <Table
         columns = {columns}
         dataSource = {rowdata}
       />
-      
     </div>);
   }
 
