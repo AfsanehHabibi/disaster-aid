@@ -186,6 +186,19 @@ FormTC.addResolver({
     return res.filled_forms[0];
   }
 })
+FormTC.addResolver({
+  name: 'findManyDes',
+  type: [FormTC.getFieldOTC('form_descriptor')],
+  args: { },
+  resolve: async ({ source, args, context, info }) => {
+    if(!context.user.permissions.includes('read:form-descriptor'))
+      return new Error("you are not authorized for this!");
+    let res= await formModel.find({},{form_descriptor:1,_id:0});
+    let formDesResult=[]
+    res.forEach(element => formDesResult.push(element.form_descriptor));
+    return formDesResult;
+  }
+})
  FormTC.getFieldTC('filled_forms').getFieldTC('fields').
 getFieldTC('location_fields').
 addRelation(
@@ -206,6 +219,7 @@ schemaComposer.Query.addFields({
   formOneLooseMatch: FormTC.getResolver('findOneLooseMatch'),
   formDesOneLooseMatch: FormTC.getResolver('findOneLooseMatchDes'),
   formMany: FormTC.getResolver('findMany'),
+  formDesMany: FormTC.getResolver('findManyDes'),
   formManyLooseMatch: FormTC.getResolver('findManyLooseMatch'),
   formCount: FormTC.getResolver('count'),
   formConnection: FormTC.getResolver('connection'),

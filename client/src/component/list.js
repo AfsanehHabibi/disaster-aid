@@ -3,23 +3,25 @@ import 'antd/dist/antd.css';
 import { List, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import { useQuery } from "@apollo/react-hooks";
-import { formsIdTitle } from 'api/graphqlQueryStr';
+import { formsDesIdTitle } from 'api/graphqlQueryStr';
 import { NotFound } from 'component/notFound';
 import gql from "graphql-tag";
 
 
 export let LoadList = (props) => {
-  const { loading:initLoading , error, data:receivedData } = useQuery(gql(formsIdTitle()))
+  const { loading:initLoading , error, data:receivedData } = useQuery(gql(formsDesIdTitle()))
   let data = [];
   let list = [];
 
 
-  if (error)
+  if (error){
+    console.error(error)
     return <NotFound/>
+  }
   if (!initLoading && receivedData){
     console.debug(receivedData)
-    data= receivedData.formMany;
-    list= receivedData.formMany;
+    data= receivedData.formDesMany;
+    list= receivedData.formDesMany;
   }
     
   const loadMore =
@@ -47,10 +49,10 @@ export let LoadList = (props) => {
       dataSource={list}
       renderItem={item => (
         <List.Item
-          actions={[<Link to={`/form/${item.form_descriptor.id}`}>fill</Link>]}
+          actions={[<Link to={`/form/${item.id}`}>fill</Link>]}
         >
           <List.Item.Meta
-            title={item.form_descriptor.title}
+            title={item.title}
           />
         </List.Item>
       )}

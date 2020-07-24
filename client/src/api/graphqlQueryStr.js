@@ -17,6 +17,16 @@ export function formByIdDes(id) {
       }
         `;
 }
+export function formsDesIdTitle(params) {
+  return`
+  {
+    formDesMany{
+        id
+        title
+    }
+  }
+    `
+}
 export function formsIdTitle(params) {
   return`
   {
