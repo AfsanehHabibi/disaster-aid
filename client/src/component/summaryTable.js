@@ -81,8 +81,8 @@ export class SummaryTable extends React.Component {
     console.log(columns);
 
     let areasName = [];
-    areaIndex = 0;
     const rowdata = filledForms.map((filledForm , index)=>{
+      areaIndex = 0;
       let f = filledForm.fields;
       let t = {};
       if(f.date_fields!==undefined  &&  f.date_fields !== null){
