@@ -90,6 +90,7 @@ FormTC.addResolver({
   }
 })
 
+
 TestTC.addResolver({
   name: 'getServerStatus',
   type: TestTC,
@@ -115,7 +116,20 @@ FormTC.addResolver({
       dot.dot(JSON.parse(JSON.stringify(args.filter))))
   }
 })
-
+FormTC.addResolver({
+  name: 'findOneLooseMatchDes',
+  type: FormTC.getFieldOTC('form_descriptor'),
+  args: { filter: FormITC },
+  resolve: async ({ source, args, context, info }) => {
+    if(!context.user.permissions.includes('read:form-descriptor'))
+      return new Error("you are not authorized for this!");
+    let res= await formModel.findOne(
+      dot.dot(JSON.parse(JSON.stringify(args.filter))),{form_descriptor:1});
+      let formDes=res.form_descriptor;
+      console.debug(formDes)
+    return formDes;
+  }
+})
 AreaTC.addResolver({
   name: 'findPointInPolygon',
   type: [AreaTC],
@@ -172,12 +186,25 @@ FormTC.addResolver({
     return res.filled_forms[0];
   }
 })
+ FormTC.getFieldTC('filled_forms').getFieldTC('fields').
+getFieldTC('location_fields').
+addRelation(
+  'areasDoc',{
+    resolver: AreaTC.getResolver('findByIds'), // NOT findById
+    prepareArgs: {
+      // source here is the `reaction` sub-doc
+      _ids: (source) => source.areas,
+    },
+    projection: { areas: true },
+  }
+ ); 
 //predifined graphql-compose resolvers
 schemaComposer.Query.addFields({
   formById: FormTC.getResolver('findById'),
   formByIds: FormTC.getResolver('findByIds'),
   formOne: FormTC.getResolver('findOne'),
   formOneLooseMatch: FormTC.getResolver('findOneLooseMatch'),
+  formDesOneLooseMatch: FormTC.getResolver('findOneLooseMatchDes'),
   formMany: FormTC.getResolver('findMany'),
   formManyLooseMatch: FormTC.getResolver('findManyLooseMatch'),
   formCount: FormTC.getResolver('count'),

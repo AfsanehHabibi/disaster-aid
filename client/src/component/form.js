@@ -90,11 +90,11 @@ export let FormHook = (props) => {
     return (<NotFound />);
   }
   try {
-    let temp = data.formOneLooseMatch.form_descriptor
+    let temp = data.formDesOneLooseMatch
   } catch (error) {
     return (<NotFound />);
   }
-  let formDescriptor = data.formOneLooseMatch.form_descriptor
+  let formDescriptor = data.formDesOneLooseMatch
   console.debug(formDescriptor)
   if (!formDescriptor.fields)
     return (<Alert

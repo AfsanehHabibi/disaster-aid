@@ -1,7 +1,6 @@
 export function formByIdDes(id) {
     return `{
-        formOneLooseMatch(filter:{form_descriptor:{id:"${id}"}}){
-          form_descriptor{
+        formDesOneLooseMatch(filter:{form_descriptor:{id:"${id}"}}){
             title
             id
             fields{
@@ -13,7 +12,6 @@ export function formByIdDes(id) {
               type
               name
               title
-          }
           }
         }
       }
@@ -95,6 +93,11 @@ export function filledFormByIdALL(filled_id,form_id) {
             coordinates
           }
           areas
+          areasDoc{
+            properties{
+              name
+            }
+          }
         }
         text_fields{
           name

@@ -5,6 +5,7 @@ module.exports = function(app) {
     app.use(createProxyMiddleware('/graphql', // replace with your endpoint
         { target: 'http://localhost:5000',
         changeOrigin: true,
+        secure: false,
      } // replace with your target
 
     ));
