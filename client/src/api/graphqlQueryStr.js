@@ -70,6 +70,11 @@ export function formByIdAll(id) {
             coordinates
           }
           areas
+          areasDoc{
+            properties{
+              name
+            }
+          }
         }
         text_fields{
           name

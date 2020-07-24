@@ -58,22 +58,25 @@ export class SummaryTable extends React.Component {
         showIcon
       />)
 
-    const num_of_columns = formDescriptor.fields.length;
-    let isNumber = new Array(num_of_columns);
-    let numberIndex = new Array(num_of_columns);
+    let columnType = [];
     let hasAnyNumber = false;
 
-    const columns = formDescriptor.fields.map((field, i) => {
+    let index = 0;
+    const columns = [];
+    formDescriptor.fields.map((field, i) => {
+      columnType[index] = field.type;
+      columns.push({title :  field.title , dataIndex : field.name })
+      if(field.type === "Location"){
+        columns.push({title : field.title+" area", dataIndex : field.name+"_area"})
+        index++;
+        columnType[index] = "area";
+      }
       if(field.type === "Number"){
         hasAnyNumber = true;
-        isNumber[i] = true;
-        numberIndex[i] = field.name;
-      }else{
-        isNumber[i] = false;
-        numberIndex[i] = "";
       }
-      return ({title :  field.title , dataIndex : field.name })
+      index++;
     })
+    const num_of_columns = index;
     console.log(columns);
 
     const rowdata = filledForms.map((filledForm , index)=>{
@@ -103,8 +106,16 @@ export class SummaryTable extends React.Component {
       if(f.location_fields!==undefined  &&  f.location_fields !== null){
         f.location_fields.map((loc_field , i)=>{
           let key = loc_field.name;
-          let val = loc_field.value.coordinates;
+          let val = loc_field.value.coordinates[0] + " , " +loc_field.value.coordinates[1] ;
+        
+          let key2 = loc_field.name+"_area";
+          let val2 = "";
+          loc_field.areasDoc.map((area , i)=>{
+            val2 += area.properties.name + " ";
+          })
+  
           t[key] = val;
+          t[key2] = val2;
         })
       }
 
@@ -113,12 +124,13 @@ export class SummaryTable extends React.Component {
     })
 
     //calculate sum for number fields
-    let sum = new Array(num_of_columns);
+    let sum = [];
     for(let col = 0; col < num_of_columns; col++){
-      if(isNumber[col] === true){
+      if(columnType[col] === "Number"){
         sum[col] = 0;
         rowdata.map((row, index)=>{
-          sum[col] += row[numberIndex[col]];
+          let val = Object.values( row );
+          sum[col] += val[col];
         })
       }else{
         sum[col] = "";
