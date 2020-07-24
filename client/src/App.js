@@ -10,6 +10,7 @@ import { MainPage } from "component/mainPage";
 import  Login from 'component/login.js';
 import jwt from 'component/jwt';
 import { AuthTest } from "component/authTest";
+import { ErrorBoundary } from "component/errorHandler";
 import { Layout, Menu, ConfigProvider, Radio  } from 'antd';
 import {
   BrowserRouter as Router,
@@ -66,10 +67,9 @@ class App extends React.Component {
           </Menu>
         </Header>
         <Content style={{ padding: '10vh 25vw 10vh 25vw' }}>
-          <div className="site-layout-content" ><Switch>
-            <Route exact path="/" >
-              <MainPage/>
-            </Route>
+          <div className="site-layout-content" ><ErrorBoundary><Switch>
+            
+            <Route exact path="/" component={MainPage}/>
             <Route path='/forms' component={LoadList}/>
             <Route path='/form/:handle' component={FormWrapper}/>
             <Route path='/summary/form/:handle' component={SummaryTable}/>
@@ -78,7 +78,8 @@ class App extends React.Component {
             <Route path="/test-auth" component={AuthTest} />
             <Route path="/controlCentre" component={FormList} />
             <Route path='*' exact={true} component={NotFound} />
-          </Switch></div>
+            
+          </Switch></ErrorBoundary></div>
         </Content>
         <Footer style={{ textAlign: 'center' }}>create dynamic forms</Footer>
       </Layout> </ConfigProvider>
