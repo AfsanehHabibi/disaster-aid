@@ -81,7 +81,8 @@ export class SummaryTable extends React.Component {
     console.log(columns);
 
     let areasName = [];
-    const rowdata = filledForms.map((filledForm , index)=>{
+    const rowdata = [];
+    filledForms.map((filledForm , index)=>{
       areaIndex = 0;
       let f = filledForm.fields;
       let t = {};
@@ -126,7 +127,7 @@ export class SummaryTable extends React.Component {
         })
       }
 
-      return t;
+      rowdata.push(t);
     
     })
 
