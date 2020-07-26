@@ -58,25 +58,32 @@ export class SummaryTable extends React.Component {
         showIcon
       />)
 
-    const num_of_columns = formDescriptor.fields.length;
-    let isNumber = new Array(num_of_columns);
-    let numberIndex = new Array(num_of_columns);
+    let columnType = [];
     let hasAnyNumber = false;
 
-    const columns = formDescriptor.fields.map((field, i) => {
+    let index = 0 , areaIndex = 0;
+    const columns = [];
+    formDescriptor.fields.map((field, i) => {
+      columnType[index] = field.type;
+      columns.push({title :  field.title , dataIndex : field.name })
+      if(field.type === "Location"){
+        columns.push({title : field.title+" area", dataIndex : "_area_"+areaIndex})
+        index++;
+        areaIndex++;
+        columnType[index] = "Area";
+      }
       if(field.type === "Number"){
         hasAnyNumber = true;
-        isNumber[i] = true;
-        numberIndex[i] = field.name;
-      }else{
-        isNumber[i] = false;
-        numberIndex[i] = "";
       }
-      return ({title :  field.title , dataIndex : field.name })
+      index++;
     })
+    const num_of_columns = index;
     console.log(columns);
 
-    const rowdata = filledForms.map((filledForm , index)=>{
+    let areasName = [];
+    const rowdata = [];
+    filledForms.map((filledForm , index)=>{
+      areaIndex = 0;
       let f = filledForm.fields;
       let t = {};
       if(f.date_fields!==undefined  &&  f.date_fields !== null){
@@ -102,26 +109,50 @@ export class SummaryTable extends React.Component {
       }
       if(f.location_fields!==undefined  &&  f.location_fields !== null){
         f.location_fields.map((loc_field , i)=>{
+          let names = [];
           let key = loc_field.name;
-          let val = loc_field.value.coordinates;
+          let val = loc_field.value.coordinates[0] + " , " +loc_field.value.coordinates[1] ;
+        
+          let key2 ="_area_" + areaIndex;
+          let val2 = "";
+          loc_field.areasDoc.map((area , i)=>{
+            val2 += area.properties.name + " ";
+            names[i] = area.properties.name;
+          })
+  
           t[key] = val;
+          t[key2] = val2;
+          areasName.push(names)
+          areaIndex++;
         })
       }
 
-      return t;
+      rowdata.push(t);
     
     })
 
+    console.log('areaNames ',areasName)
     //calculate sum for number fields
-    let sum = new Array(num_of_columns);
+    let sum = [];
+    areaIndex = 0;
     for(let col = 0; col < num_of_columns; col++){
-      if(isNumber[col] === true){
+      if(columnType[col] === "Number"){
         sum[col] = 0;
         rowdata.map((row, index)=>{
-          sum[col] += row[numberIndex[col]];
+          let val = Object.values( row );
+          sum[col] += val[col];
         })
       }else{
         sum[col] = "";
+      }
+      if(columnType[col] === "Area"){
+        //add filters and onFilter to column
+        columns[col].filters = areasName[areaIndex].map((n , i)=>{
+          return({text : n , value : n})
+        })
+        let index = "_area_" + areaIndex;
+        columns[col].onFilter = (value, record) => record[index].indexOf(value) !== -1
+        areaIndex++;
       }
     }
     
