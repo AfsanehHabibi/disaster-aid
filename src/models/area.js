@@ -1,5 +1,8 @@
 let mongoose = require('mongoose')
-
+let geoJsonValidator = require('../validator/geoJsonValidator').validateGeoJson
+function geometryValidator(v) {
+    return geoJsonValidator(this.geometry);
+}
 let areaSchema = new mongoose.Schema({
     type: {
         type: String,
@@ -29,19 +32,22 @@ let areaSchema = new mongoose.Schema({
     geometry: {
         type: {
             type: String,
+            enum: ["Polygon", "MultiPolygon"],
             required: true
         },
         coordinates:
         {
-            type: [[[Number]]], // Array of arrays of arrays of numbers
-            required: true
-        }
+            type: mongoose.SchemaType.Mixed,
+            required: true,
+            validate: [geometryValidator, 'geometery should be a valid geojson object'] 
+        },
+        
     },
-    relations:{
-        point_in_area:[{ type: mongoose.Schema.Types.ObjectId, ref: 'FormFilled_forms' }]
+    relations: {
+        point_in_area: [{ type: mongoose.Schema.Types.ObjectId, ref: 'FormFilled_forms' }]
     }
 })
-
+ 
 exports.areaSchema = areaSchema
 exports.areaModel = mongoose.model('Area', areaSchema)
 

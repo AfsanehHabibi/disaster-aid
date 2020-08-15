@@ -4,9 +4,9 @@
   "description": "a utitility app for organizing help in natural disaster",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "start": "node server.js",
-    "debug": "nodemon --inspect server.js",
+    "debug": "nodemon --inspect=7898 server.js",
     "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
     "dev": "concurrently --kill-others-on-fail \"npm run debug\" \"cd client && npm start\""
   },
@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "concurrently": "^5.2.0",
+    "mocha": "^8.1.1",
     "nodemon": "^2.0.4"
   }
 }
