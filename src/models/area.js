@@ -6,7 +6,8 @@ function geometryValidator(v) {
 let areaSchema = new mongoose.Schema({
     type: {
         type: String,
-        required: true
+        required: true,
+        enum: ["Feature"]
     },
     properties: {
         stroke: {
@@ -37,7 +38,7 @@ let areaSchema = new mongoose.Schema({
         },
         coordinates:
         {
-            type: mongoose.SchemaType.Mixed,
+            type: mongoose.Schema.Types.Mixed,
             required: true,
             validate: [geometryValidator, 'geometery should be a valid geojson object'] 
         },
