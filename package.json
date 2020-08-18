@@ -4,7 +4,7 @@
   "description": "a utitility app for organizing help in natural disaster",
   "main": "server.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --timeout 30000",
     "start": "node server.js",
     "debug": "nodemon --inspect=7898 server.js",
     "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
@@ -32,6 +32,8 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
     "concurrently": "^5.2.0",
     "mocha": "^8.1.1",
     "nodemon": "^2.0.4"
