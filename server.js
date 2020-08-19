@@ -52,8 +52,8 @@ app.use(morgan(':req[header] :res[header] :method :url :response-time', { stream
 
 app.set('port', process.env.PORT || 5000);
 // Create an express server and a GraphQL endpoint
-app.use('/graphql',  express_graphql(
-  //app.use('/graphql', checkJwt, express_graphql(
+//app.use('/graphql',  express_graphql(
+app.use('/graphql', checkJwt, express_graphql(
 
   req => ({
     schema:graphqlSchema,

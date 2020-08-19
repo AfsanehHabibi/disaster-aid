@@ -1,3 +1,4 @@
+const check = require('../authorization/check')
 const mongoose = require('mongoose');
 const {GraphQLString,GraphQLNonNull,GraphQLInputObjectType} = require('graphql')
 const { composeWithMongoose } = require('graphql-compose-mongoose');
@@ -41,7 +42,8 @@ FormTC.addResolver({
   type: FormTC,
   args: { input: InputITC, filter: FormITC },
   resolve: async ({ source, args, context, info }) => {
-    if(!context.user.permissions.includes('create:form-filled'))
+    if(!check(context.user[process.env.ROLE_URL],'create:form-filled'))
+    //if(!context.user.permissions.includes('create:form-filled'))
       return new Error("you are not authorized for this!");
     let mapPointToArea = undefined;
     let submittedForm = undefined;
@@ -110,7 +112,10 @@ FormTC.addResolver({
   type: FormTC,
   args: { filter: FormITC },
   resolve: async ({ source, args, context, info }) => {
-    if(!context.user.permissions.includes('read:form-filled') || !context.user.permissions.includes('read:form-descriptor'))
+    if(!check(context.user[process.env.ROLE_URL],'read:form-filled') ||
+    !check(context.user[process.env.ROLE_URL],'read:form-descriptor'))
+    //if(!context.user.permissions.includes('read:form-filled') ||
+    // !context.user.permissions.includes('read:form-descriptor'))
       return new Error("you are not authorized for this!");
     return formModel.findOne(
       dot.dot(JSON.parse(JSON.stringify(args.filter))))
@@ -121,7 +126,8 @@ FormTC.addResolver({
   type: FormTC.getFieldOTC('form_descriptor'),
   args: { filter: FormITC },
   resolve: async ({ source, args, context, info }) => {
-    if(!context.user.permissions.includes('read:form-descriptor'))
+    if(!check(context.user[process.env.ROLE_URL],'read:form-descriptor'))
+    //if(!context.user.permissions.includes('read:form-descriptor'))
       return new Error("you are not authorized for this!");
     let res= await formModel.findOne(
       dot.dot(JSON.parse(JSON.stringify(args.filter))),{form_descriptor:1});
@@ -135,7 +141,8 @@ AreaTC.addResolver({
   type: [AreaTC],
   args: { input: InputITC },
   resolve: async ({ source, args, context, info }) => {
-    if(!context.user.permissions.includes('read:area'))
+    if(!check(context.user[process.env.ROLE_URL],'read:area'))
+    //if(!context.user.permissions.includes('read:area'))
       return new Error("you are not authorized for this!");
     return areaModel.find({
       geometry: {
@@ -152,7 +159,10 @@ FormTC.addResolver({
   type: [FormTC],
   args: { filter:FormITC},
   resolve: async ({ source, args, context, info }) => {
-    if(!context.user.permissions.includes('read:form-filled') || !context.user.permissions.includes('read:form-descriptor'))
+    //if(!context.user.permissions.includes('read:form-filled') ||
+    // !context.user.permissions.includes('read:form-descriptor'))
+    if(!check(context.user[process.env.ROLE_URL],'read:form-filled') ||
+    !check(context.user[process.env.ROLE_URL],'read:form-descriptor'))
       return new Error("you are not authorized for this!");
     return formModel.find(
       dot.dot(JSON.parse(JSON.stringify(args.filter))))
@@ -164,7 +174,10 @@ FormTC.addResolver({
   type: FormTC.getFieldOTC('filled_forms'),
   args: {filter:DoubleId},
   resolve: async ({source,args,context,info}) => {
-    if(!context.user.permissions.includes('read:form-filled') || !context.user.permissions.includes('read:form-descriptor'))
+    //if(!context.user.permissions.includes('read:form-filled') ||
+    // !context.user.permissions.includes('read:form-descriptor'))
+    if(!check(context.user[process.env.ROLE_URL],'read:form-filled') ||
+    !check(context.user[process.env.ROLE_URL],'read:form-descriptor'))
       return new Error("you are not authorized for this!")
     console.log(args.filter)
     let input=JSON.parse(JSON.stringify(args.filter))
@@ -191,7 +204,9 @@ FormTC.addResolver({
   type: [FormTC.getFieldOTC('form_descriptor')],
   args: { },
   resolve: async ({ source, args, context, info }) => {
-    if(!context.user.permissions.includes('read:form-descriptor'))
+    console.debug(context.user[process.env.ROLE_URL])
+    //if(!context.user.permissions.includes('read:form-descriptor'))
+    if(!check(context.user[process.env.ROLE_URL],'read:form-descriptor'))
       return new Error("you are not authorized for this!");
     let res= await formModel.find({},{form_descriptor:1,_id:0});
     let formDesResult=[]
