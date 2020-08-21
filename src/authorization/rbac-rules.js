@@ -10,7 +10,7 @@ const rules = {
   },
   FieldAgent: {
     static: [
-      "create:form-filled	",
+      "create:form-filled",
       "read:area",
       "read:form-descriptor",
       "dashboard-page:visit"

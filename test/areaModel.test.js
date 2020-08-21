@@ -1,11 +1,11 @@
 let mongoose = require('mongoose')
-const { startDatabase } = require('../src/database/mongo');
+const { startDatabase, stopDatabase } = require('../src/database/mongo');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 chai.should();
 const { beforeEach } = require('mocha');
-const continents = require('./databse/continent/continentsWithName.json');
+const continents = require('./testData/continent/continentsWithName.json');
 const { assert } = require('chai');
 const areaModel = require('../src/models/area').areaModel
 
@@ -27,10 +27,7 @@ describe('area model ', () => {
         areas.should.have.length(8);
     })
     after((done) => {
-        mongoose.disconnect(() => {
-            //this function runs after the drop is completed
-            done(); //go ahead everything is done now.
-        });
+        stopDatabase(done)
     })
 }
 );
