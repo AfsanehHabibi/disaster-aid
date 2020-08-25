@@ -18,7 +18,8 @@ app.use('/graphql', checkJwt, express_graphql(
     graphiql: true,
     context: {
       user: req.user
-    }
+    },
+    customFormatErrorFn: (err) => ({ message: err.message, status: err.status })
   }
   )));
 if (process.env.NODE_ENV === 'production') {

@@ -1,9 +1,16 @@
 const check = require('../authorization/check')
 const mongoose = require('mongoose');
-const {GraphQLString,GraphQLNonNull,GraphQLInputObjectType} = require('graphql')
+const { GraphQLString, GraphQLNonNull, GraphQLInputObjectType } = require('graphql')
 const { composeWithMongoose } = require('graphql-compose-mongoose');
 const { schemaComposer, toInputObjectType } = require('graphql-compose');
 const dot = require('dot-object');
+const formPushToFilledResolver = require('./resolvers/formPushToFilled');
+const findManyDesResolver = require('./resolvers/findManyDes');
+const findManyLooseMatchResolver = require('./resolvers/findManyLooseMatch');
+const findOneLooseMatchResolver = require('./resolvers/findOneLooseMatch');
+const findOneLooseMatchDesResolver = require('./resolvers/findOneLooseMatchDes');
+const findSubByIdResolver = require('./resolvers/findSubById')
+//const resolver = require('./resolvers/formPushToFilled');
 // STEP 1: DEFINE MONGOOSE SCHEMA AND MODEL
 const areaModel = require('../models/area').areaModel
 const formModel = require('../models/form').formModel
@@ -41,183 +48,44 @@ FormTC.addResolver({
   name: 'pushToArray',
   type: FormTC,
   args: { input: InputITC, filter: FormITC },
-  resolve: async ({ source, args, context, info }) => {
-    if(!check(context.user[process.env.ROLE_URL],'create:form-filled'))
-    //if(!context.user.permissions.includes('create:form-filled'))
-      return new Error("you are not authorized for this!");
-    let mapPointToArea = undefined;
-    let submittedForm = undefined;
-    let input = JSON.parse(JSON.stringify(args.input));
-    input._id = new mongoose.Types.ObjectId;
-    console.log(mongoose.isValidObjectId(input._id))
-    try {
-      const responseArray = await Promise.all(
-        input.fields.location_fields.map((element) => {
-          console.log(element.value)
-          point = element.value
-          return areaModel.find({
-            geometry: {
-              $geoIntersects:
-              {
-                $geometry: point
-              }
-            }
-          }, '_id')
-        })
-
-      );
-
-      input.fields.location_fields.forEach((element, index) => {
-      element.areas = responseArray[index]
-      });
-      submittedForm = await formModel.findOneAndUpdate(
-        dot.dot(JSON.parse(JSON.stringify(args.filter)))
-        , { $push: { filled_forms: input } })
-      console.debug(submittedForm)
-      let areasIdsFlat = responseArray.flat(1)
-      mapPointToArea = await areaModel.updateMany(
-        { _id: { $in: areasIdsFlat } },
-        { $push: { 'relations.point_in_area': input._id } },
-        { multi: true }
-      )
-    } catch (error) {
-      console.error(error)
-      return error
-    }finally{
-      if(mapPointToArea)
-        return submittedForm;
-      else 
-        return null;
-    }
-  }
+  resolve: formPushToFilledResolver.resolve
 })
-
-
-TestTC.addResolver({
-  name: 'getServerStatus',
-  type: TestTC,
-  resolve: async ({ source, args, context, info }) => {
-    console.log(context.user)
-    return {
-      enviroment_variable: {
-      },
-      isDatabase_connectd: mongoose.connection.readyState,
-      modelName: [InputITC.getType(), FormITC.getType()]
-    }
-  }
-})
-
 FormTC.addResolver({
   name: 'findOneLooseMatch',
   type: FormTC,
   args: { filter: FormITC },
-  resolve: async ({ source, args, context, info }) => {
-    if(!check(context.user[process.env.ROLE_URL],'read:form-filled') ||
-    !check(context.user[process.env.ROLE_URL],'read:form-descriptor'))
-    //if(!context.user.permissions.includes('read:form-filled') ||
-    // !context.user.permissions.includes('read:form-descriptor'))
-      return new Error("you are not authorized for this!");
-    return formModel.findOne(
-      dot.dot(JSON.parse(JSON.stringify(args.filter))))
-  }
+  resolve: findOneLooseMatchResolver.resolve
 })
 FormTC.addResolver({
   name: 'findOneLooseMatchDes',
   type: FormTC.getFieldOTC('form_descriptor'),
   args: { filter: FormITC },
-  resolve: async ({ source, args, context, info }) => {
-    if(!check(context.user[process.env.ROLE_URL],'read:form-descriptor'))
-    //if(!context.user.permissions.includes('read:form-descriptor'))
-      return new Error("you are not authorized for this!");
-    let res= await formModel.findOne(
-      dot.dot(JSON.parse(JSON.stringify(args.filter))),{form_descriptor:1});
-      let formDes=res.form_descriptor;
-      console.debug(formDes)
-    return formDes;
-  }
+  resolve: findOneLooseMatchDesResolver.resolve
 })
-AreaTC.addResolver({
-  name: 'findPointInPolygon',
-  type: [AreaTC],
-  args: { input: InputITC },
-  resolve: async ({ source, args, context, info }) => {
-    if(!check(context.user[process.env.ROLE_URL],'read:area'))
-    //if(!context.user.permissions.includes('read:area'))
-      return new Error("you are not authorized for this!");
-    return areaModel.find({
-      geometry: {
-        $geoIntersects:
-        {
-          $geometry:args.point
-        }
-      }
-    })
-  }
-})
+
 FormTC.addResolver({
   name: 'findManyLooseMatch',
   type: [FormTC],
-  args: { filter:FormITC},
-  resolve: async ({ source, args, context, info }) => {
-    //if(!context.user.permissions.includes('read:form-filled') ||
-    // !context.user.permissions.includes('read:form-descriptor'))
-    if(!check(context.user[process.env.ROLE_URL],'read:form-filled') ||
-    !check(context.user[process.env.ROLE_URL],'read:form-descriptor'))
-      return new Error("you are not authorized for this!");
-    return formModel.find(
-      dot.dot(JSON.parse(JSON.stringify(args.filter))))
-  }
+  args: { filter: FormITC },
+  resolve: findManyLooseMatchResolver.resolve
 })
 
 FormTC.addResolver({
   name: 'findSubById',
   type: FormTC.getFieldOTC('filled_forms'),
-  args: {filter:DoubleId},
-  resolve: async ({source,args,context,info}) => {
-    //if(!context.user.permissions.includes('read:form-filled') ||
-    // !context.user.permissions.includes('read:form-descriptor'))
-    if(!check(context.user[process.env.ROLE_URL],'read:form-filled') ||
-    !check(context.user[process.env.ROLE_URL],'read:form-descriptor'))
-      return new Error("you are not authorized for this!")
-    console.log(args.filter)
-    let input=JSON.parse(JSON.stringify(args.filter))
-    let res=null;
-    try {
-      res=await formModel.findOne({'form_descriptor.id':args.filter.form_id}
-    ,
-    {'filled_forms':{
-      $elemMatch:{
-        '_id':args.filter.filled_id
-      }
-    }}
-      )
-    console.log("tha")
-    } catch (error) {
-      console.log(error)
-    }
-    console.log(res)
-    return res.filled_forms[0];
-  }
+  args: { filter: DoubleId },
+  resolve: findSubByIdResolver.resolve
 })
 FormTC.addResolver({
   name: 'findManyDes',
   type: [FormTC.getFieldOTC('form_descriptor')],
-  args: { },
-  resolve: async ({ source, args, context, info }) => {
-    console.debug(context.user[process.env.ROLE_URL])
-    //if(!context.user.permissions.includes('read:form-descriptor'))
-    if(!check(context.user[process.env.ROLE_URL],'read:form-descriptor'))
-      return new Error("you are not authorized for this!");
-    let res= await formModel.find({},{form_descriptor:1,_id:0});
-    let formDesResult=[]
-    res.forEach(element => formDesResult.push(element.form_descriptor));
-    return formDesResult;
-  }
+  args: {},
+  resolve: findManyDesResolver.resolve
 })
- FormTC.getFieldTC('filled_forms').getFieldTC('fields').
-getFieldTC('location_fields').
-addRelation(
-  'areasDoc',{
+FormTC.getFieldTC('filled_forms').getFieldTC('fields').
+  getFieldTC('location_fields').
+  addRelation(
+    'areasDoc', {
     resolver: AreaTC.getResolver('findByIds'), // NOT findById
     prepareArgs: {
       // source here is the `reaction` sub-doc
@@ -225,7 +93,7 @@ addRelation(
     },
     projection: { areas: true },
   }
- ); 
+  );
 //predifined graphql-compose resolvers
 schemaComposer.Query.addFields({
   formById: FormTC.getResolver('findById'),
@@ -239,7 +107,6 @@ schemaComposer.Query.addFields({
   formCount: FormTC.getResolver('count'),
   formConnection: FormTC.getResolver('connection'),
   formPagination: FormTC.getResolver('pagination'),
-  testInfo: TestTC.getResolver('getServerStatus'),
   formFilledById: FormTC.getResolver('findSubById')
 });
 
@@ -262,8 +129,7 @@ schemaComposer.Query.addFields({
   areaMany: AreaTC.getResolver('findMany'),
   areaCount: AreaTC.getResolver('count'),
   areaConnection: AreaTC.getResolver('connection'),
-  areaPagination: AreaTC.getResolver('pagination'),
-  areaByPoint: AreaTC.getResolver('findPointInPolygon')
+  areaPagination: AreaTC.getResolver('pagination')
 });
 
 schemaComposer.Mutation.addFields({
@@ -278,4 +144,10 @@ schemaComposer.Mutation.addFields({
 });
 
 const graphqlSchema = schemaComposer.buildSchema();
-module.exports = graphqlSchema;
+module.exports = {
+  graphqlSchema,
+  InputITC,
+  FormITC,
+  FormTC,
+  DoubleId
+}

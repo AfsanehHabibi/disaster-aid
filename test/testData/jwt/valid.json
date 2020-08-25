@@ -1,0 +1,32 @@
+{
+    "admin":{
+        "https://shrouded-garden-53962.herokuapp.com/roles": ["Admin"],
+        "iss": "https://dev-50-zt9d7.us.auth0.com/",
+        "sub": "auth0|5f0255a92eb3030019c830cf",
+        "aud": ["DisasterAidApi", "https://dev-50-zt9d7.us.auth0.com/userinfo"],
+        "iat": 1597763741,
+        "exp": 1597850141,
+        "azp": "4uD40BOHBbyrO5E3NjsF4osdeTb5sJPz",
+        "scope": "openid profile email"
+    },
+    "controlCenterAgent":{
+        "https://shrouded-garden-53962.herokuapp.com/roles": ["ControlCenterAgent"],
+        "iss": "https://dev-50-zt9d7.us.auth0.com/",
+        "sub": "auth0|5f0255a92eb3030019c830cf",
+        "aud": ["DisasterAidApi", "https://dev-50-zt9d7.us.auth0.com/userinfo"],
+        "iat": 1597763741,
+        "exp": 1597850141,
+        "azp": "4uD40BOHBbyrO5E3NjsF4osdeTb5sJPz",
+        "scope": "openid profile email"
+    },
+    "fieldAgent":{
+        "https://shrouded-garden-53962.herokuapp.com/roles": ["FieldAgent"],
+        "iss": "https://dev-50-zt9d7.us.auth0.com/",
+        "sub": "auth0|5f0255a92eb3030019c830cf",
+        "aud": ["DisasterAidApi", "https://dev-50-zt9d7.us.auth0.com/userinfo"],
+        "iat": 1597763741,
+        "exp": 1597850141,
+        "azp": "4uD40BOHBbyrO5E3NjsF4osdeTb5sJPz",
+        "scope": "openid profile email"
+    }
+}
