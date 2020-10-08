@@ -15,7 +15,7 @@ const { Step } = Steps;
 export class MainPage extends React.Component {
     render() {
         return (<div><Title >Disaster Aid</Title>
-        <img src={Image} width="100%" height="100%"alt="flood"/>
+        {/* <img src={Image} width="100%" height="100%"alt="flood"/> */}
         <br></br>
         <Title level={3}>What we do</Title>
         <Text strong>Society is challenged by various natural phenomena,

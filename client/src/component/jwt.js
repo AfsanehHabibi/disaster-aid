@@ -51,11 +51,22 @@ export const ExternalApiComponent = () => {
 
   const callApi = async () => {
     try {
-      const token = await getAccessTokenSilently();
+      getAccessTokenSilently().then((token)=>{
+        
+        console.log(token)
+        fetch(`${baseUrl}/api/private`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).then((res)=>{
+          console.log(res)
+        })
+      })
+      
       const baseUrl = 'http://localhost:5000';
       const response = await fetch(`${baseUrl}/api/private`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer `,
         },
       });
 

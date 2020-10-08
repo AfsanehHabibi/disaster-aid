@@ -1,6 +1,7 @@
 import React from "react";
 import {Detail} from 'component/detail';
 import { useAuth0 } from "@auth0/auth0-react";
+import { Layout, Menu, ConfigProvider, Radio, Dropdown, Button, Tag } from 'antd';
 
 const Login = () => {
   
@@ -20,7 +21,7 @@ const Login = () => {
   }
   
   return (
-    <div >
+    <Button >
 
         {isAuthenticated && getToken() &&(
           <Detail />
@@ -32,7 +33,7 @@ const Login = () => {
            </a>
         )}
 
-    </div>
+    </Button>
   );
 };
 
